@@ -13,20 +13,11 @@
       <pubDate>Mon, 30 Jan 2023 00:00:00 +0000</pubDate>
       
       <guid>https://rickt.io/posts/setup-unifi-controller-using-docker/</guid>
-      <description>Setup Unifi Controller using Docker 1. Install Docker I used the official guide to install Docker, following the method to install from their apt repository:
+      <description>1. Install Docker I used the official guide to install Docker, following the method to install from their apt repository:
 https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
 To validate that it&amp;rsquo;s working, run:
 sudo docker run hello-world  Optionally, you can add your user to the docker group. This will remove the need to preface docker commands with sudo:
-sudo usermod -aG docker $USER newgrp docker  2. Configure Docker Compose File Create a docker-compose.</description>
-    </item>
-    
-    <item>
-      <title>Example</title>
-      <link>https://rickt.io/posts/example/</link>
-      <pubDate>Tue, 27 Dec 2022 16:50:08 -0800</pubDate>
-      
-      <guid>https://rickt.io/posts/example/</guid>
-      <description>Entry Title Here byline info here First bit Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</description>
+sudo usermod -aG docker $USER newgrp docker  2. Configure Docker Compose File Create a docker-compose.yml file, to store configuration paramters.</description>
     </item>
     
   </channel>
