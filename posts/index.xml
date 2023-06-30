@@ -26,5 +26,14 @@ I had setup a simple website on S3 using the graphical interface before, so this
       <description>Learning how to use Docker with existing images to host PiHole, Wireguard, and Unifi home services.</description>
     </item>
     
+    <item>
+      <title>Example</title>
+      <link>https://rickt.io/posts/example/</link>
+      <pubDate>Tue, 27 Dec 2022 16:50:08 -0800</pubDate>
+      
+      <guid>https://rickt.io/posts/example/</guid>
+      <description>Entry Title Here byline info here First bit Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</description>
+    </item>
+    
   </channel>
 </rss>
