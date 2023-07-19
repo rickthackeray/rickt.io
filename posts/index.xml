@@ -9,21 +9,22 @@
     <lastBuildDate>Thu, 29 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Deploying a website to S3 using AWS CLI</title>
-      <link>https://rickt.io/posts/deploying-a-website-to-s3-using-aws-cli/</link>
+      <link>https://rickt.io/posts/02-deploying-a-website-to-s3-using-aws-cli/</link>
       <pubDate>Thu, 29 Jun 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://rickt.io/posts/deploying-a-website-to-s3-using-aws-cli/</guid>
+      <guid>https://rickt.io/posts/02-deploying-a-website-to-s3-using-aws-cli/</guid>
       <description>Introduction A while back I built a basic CRUD app to learn more about app development. For a while I hosted it on an EC2 instance, but shut it down at some point. To get it back up an running I decided to split the front end hosting off and use S3.
 I had setup a simple website on S3 using the graphical interface before, so this time I wanted to challenge myself by using the command line with AWS CLI.</description>
     </item>
     
     <item>
       <title>Docker for home services</title>
-      <link>https://rickt.io/posts/docker-for-home-services/</link>
+      <link>https://rickt.io/posts/01-docker-for-home-services/</link>
       <pubDate>Mon, 30 Jan 2023 00:00:00 +0000</pubDate>
       
-      <guid>https://rickt.io/posts/docker-for-home-services/</guid>
-      <description>Learning how to use Docker with existing images to host PiHole, Wireguard, and Unifi home services.</description>
+      <guid>https://rickt.io/posts/01-docker-for-home-services/</guid>
+      <description>Introduction Up to this point, I hadn&amp;rsquo;t used Docker very much. The organizations I worked at were traditional Windows environments with no in-house development. I could see the value in containers generally, but it was hard to justify and especially to convince others it was worth using in those environments.
+I&amp;rsquo;ve long hosted various services for myself at home. In the past these were ran on separate Windows VMs so that I could better learn the skills needed for the work I was doing.</description>
     </item>
     
   </channel>
