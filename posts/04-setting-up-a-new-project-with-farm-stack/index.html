@@ -236,7 +236,7 @@ app<span style="color:#f92672">.</span>add_middleware(
 <pre><code>db.board01.insertOne({title:&quot;hello&quot;,description:&quot;there&quot;})
 </code></pre>
 <p>To confirm, I viewed the results in Compass:
-<img loading="lazy" src="2023-09-14_01.png#center" alt="screenshot"  />
+<img loading="lazy" src="/images/2023-09-14_01.png#center" alt="screenshot"  />
 </p>
 <h1 id="connecting-fastapi-to-mongodb">Connecting FastAPI to MongoDB<a hidden class="anchor" aria-hidden="true" href="#connecting-fastapi-to-mongodb">#</a></h1>
 <p>To connect the FastAPI backend to the Mongo database, I created a file, <code>database.py</code>. Here, I used the <strong>motor</strong> python module to create functions that will be called by main.py. I also created a separate <code>keys.env</code> to more securly insert my Mongo Atlas credentials, then loaded those using <strong>dotenv</strong>. Here&rsquo;s what that ended up looking like:</p>
@@ -457,7 +457,7 @@ MONGO_PASS=mypassphrase
 }
 </code></pre></div><p>I&rsquo;m glossing over a lot of the difficulty I had in creating the React code. If you&rsquo;re looking for a good resource for learning React, I recommend checking out <a href="https://scrimba.com/learn/learnreact/">Scrimba&rsquo;s course by Bob Ziroll</a>. It is one of the best resources for any technology that I&rsquo;ve come across.</p>
 <p>After that I spent way too long working on css to create a passable aesthetic, and I&rsquo;m pretty happy how it turned out:</p>
-<p><img loading="lazy" src="2023-09-14_02.png#center" alt="screenshot"  />
+<p><img loading="lazy" src="/images/2023-09-14_02.png#center" alt="screenshot"  />
 </p>
 <h1 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h1>
 <p>I am looking forward to using this project to learn more about Docker, CI/CD, IAC, and other platform engineering practices.</p>
