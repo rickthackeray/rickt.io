@@ -6,7 +6,17 @@
     <description>Recent content on Learning with Rick</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 14 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>05 Parsing CSV data using Python</title>
+      <link>https://rickt.io/posts/05-parsing-csv-data-using-python/</link>
+      <pubDate>Thu, 05 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://rickt.io/posts/05-parsing-csv-data-using-python/</guid>
+      <description>Introduction I recently had another use case for writing a script to parse some data. Normally, I would use Powershell for something like this (see Updating a CSV using Powershell), but this time I wanted to challenge myself to do it in Python. I&amp;rsquo;ve used Python a little, but I&amp;rsquo;m not as strong with it as I am with Powershell.
+The problem I wanted to solve was that I needed to take a pool of digital cards for my MTG Cube, sort them into their color categories, shuffle the color-grouped cards, and deal them into &amp;ldquo;booster packs&amp;rdquo; - groups of 15 cards.</description>
+    </item>
+    
     <item>
       <title>Setting up a new project with FARM stack</title>
       <link>https://rickt.io/posts/04-setting-up-a-new-project-with-farm-stack/</link>
