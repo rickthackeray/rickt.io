@@ -43,7 +43,7 @@ Fortunately, I had a use case recently where Powershell would be a great tool.</
       
       <guid>https://rickt.io/posts/02-deploying-a-website-to-s3-using-aws-cli/</guid>
       <description>Introduction A while back I built a basic CRUD app to learn more about app development. For a while I hosted it on an EC2 instance, but shut it down at some point. To get it back up an running I decided to split the front end hosting off and use S3.
-I had setup a simple website on S3 using the graphical interface before, so this time I wanted to challenge myself by using the command line with AWS CLI.</description>
+I had set up a simple website on S3 using the graphical interface before, so this time I wanted to challenge myself by using the command line with AWS CLI.</description>
     </item>
     
     <item>

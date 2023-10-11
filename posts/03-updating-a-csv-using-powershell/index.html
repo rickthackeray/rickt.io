@@ -182,10 +182,10 @@ Fortunately, I had a use case recently where Powershell would be a great tool."/
 <figure class="entry-cover"><img loading="lazy" src="https://rickt.io/images/powershell.svg" alt="">
         
 </figure>
-  <div class="post-content"><h1 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h1>
+  <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
 <p>I love Powershell. Over my IT career I have spent a lot of time learning how to use it to automate all kinds of things: batch creation of Active Directory accounts, interfacing with APIs, tracking network congestion, and conducting mass software deployments. During the past year I&rsquo;ve been focused on learning DevOps practices, where Linux is king and Powershell is rarely mentioned - and I&rsquo;ve missed using it.</p>
 <p>Fortunately, I had a use case recently where Powershell would be a great tool. I needed to update a CSV file. Specifically, I needed to add &ldquo;tag&rdquo; attributes to cards for my <a href="http://cubecobra.com/cube/list/rickawesome">MTG Cube</a>. This can be done in the web app, but it&rsquo;s time consuming. There is also no API, but you can export a CSV, then modify and upload it to update your cube. So I wrote a tool to do just that.</p>
-<h1 id="setup">Setup<a hidden class="anchor" aria-hidden="true" href="#setup">#</a></h1>
+<h2 id="setup">Setup<a hidden class="anchor" aria-hidden="true" href="#setup">#</a></h2>
 <p>I often start writing a script by interactively working out what needs to happen in a shell. So, After downloading the CSV, I imported it to a variable to see what the format was like</p>
 <p><img loading="lazy" src="/images/2023-07-18_01.png#center" alt="screenshot"  />
 </p>
@@ -198,7 +198,7 @@ Fortunately, I had a use case recently where Powershell would be a great tool."/
 <p><img loading="lazy" src="/images/2023-07-18_03.png#center" alt="screenshot"  />
 </p>
 <p>Then I uploaded it the web app and saw that the tags updated as expected.</p>
-<h1 id="adding-data-in-bulk">Adding Data in Bulk<a hidden class="anchor" aria-hidden="true" href="#adding-data-in-bulk">#</a></h1>
+<h2 id="adding-data-in-bulk">Adding Data in Bulk<a hidden class="anchor" aria-hidden="true" href="#adding-data-in-bulk">#</a></h2>
 <p>I had the basics laid out, now I needed to scale it up. The way I would do that would be to use a different web app that essentially let me select cards and export them to a text file. So, I would do that for one tag at a time, using the tag as the filename. Example:</p>
 <pre tabindex="0"><code>Spells.txt
 1 Bazaar of Baghdad
@@ -232,7 +232,7 @@ Fortunately, I had a use case recently where Powershell would be a great tool."/
             }
         }
 </code></pre></div><p>It&rsquo;s not the prettiest of logic, but it worked. The only improvement I wanted to make was to generalize it a bit more into a cmdlet.</p>
-<h1 id="putting-it-all-together">Putting it All Together<a hidden class="anchor" aria-hidden="true" href="#putting-it-all-together">#</a></h1>
+<h2 id="putting-it-all-together">Putting it All Together<a hidden class="anchor" aria-hidden="true" href="#putting-it-all-together">#</a></h2>
 <p>Creating a cmdlet is pretty easy, but I do it seldom enough that I always forget the details. Luckily I made a <a href="https://gist.github.com/rickthackeray/da32e096f50ceb466db8fcdb60e195a7">gist</a> for it on GitHub. So, a copy/paste and few modifications later and I had the final product:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Powershell" data-lang="Powershell"><span style="color:#66d9ef">function</span> Add-TagsToCards {
     [<span style="color:#66d9ef">CmdletBinding</span>()]
@@ -279,7 +279,7 @@ Fortunately, I had a use case recently where Powershell would be a great tool."/
         $csv | Export-Csv $OutputCSV
     }
 }  
-</code></pre></div><h1 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h1>
+</code></pre></div><h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
 <p>Now when I make a new set of selections, I can export the cube (csv) and deck (txt) files and run the command</p>
 <p><code>Add-TagsToCards Spells.txt RicksAwesomeCube.csv</code></p>
 <p>and re-import the modified csv. This is an improvement over the process of tagging cards in the web interface. Of course it would be even better if there was an API, but this works.</p>

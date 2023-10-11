@@ -179,14 +179,14 @@
 <figure class="entry-cover"><img loading="lazy" src="https://rickt.io/images/farmstack.png" alt="">
         
 </figure>
-  <div class="post-content"><h1 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h1>
+  <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
 <p>I&rsquo;ve been wanting to learn more about CI/CD tools and techniques. To do this I could use an existing project, but I also want to get more reps in with the development process, so I decided to start a new project. A note taking app sounded interesting and simple enough to cover what I want to learn. So, I started by setting up a basic structure using the FARM stack.</p>
 <p>The FARM stack stands for:<br>
 <strong>Fa</strong>stAPI - a Python framework for easily writing a back end API.<br>
 <strong>R</strong>eact - a Javascript library used for writing interactive front end interfaces.<br>
 <strong>M</strong>ongoDB - a NoSQL document DB with low latency and high scalability.</p>
 <p>I chose this stack because I have a little experience with FastAPI and React and wanted to check out MongoDB, as I had only used SQLite before and wanted to see how a NoSQL document DB works.</p>
-<h1 id="prerequisites">Prerequisites<a hidden class="anchor" aria-hidden="true" href="#prerequisites">#</a></h1>
+<h2 id="prerequisites">Prerequisites<a hidden class="anchor" aria-hidden="true" href="#prerequisites">#</a></h2>
 <p>Before starting, I already had the following installed:\</p>
 <ul>
 <li><a href="https://nodejs.org/ro/download">NodeJS</a></li>
@@ -198,7 +198,7 @@
 </li>
 </ul>
 <p>I used Linux (Ubuntu) for my workstation, but this process works for Windows and MacOS as well.</p>
-<h1 id="fastapi">FastAPI<a hidden class="anchor" aria-hidden="true" href="#fastapi">#</a></h1>
+<h2 id="fastapi">FastAPI<a hidden class="anchor" aria-hidden="true" href="#fastapi">#</a></h2>
 <p>First, I created a project folder along with two subfolders for the front end and back end, as these will be containerized and deployed separately at a later date.</p>
 <p><code>~/coding/projects/notes/frontend</code><br>
 <code>~/coding/projects/notes/backend</code></p>
@@ -229,7 +229,7 @@ app<span style="color:#f92672">.</span>add_middleware(
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">read_root</span>():
     <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#34;Hello&#34;</span>:<span style="color:#e6db74">&#34;World&#34;</span>}
 </code></pre></div><p>To make sure this worked, I started the Uvicorn server locally with <code>uvicorn main:app --reload</code> and got the &ldquo;Hello: World&rdquo; response at http://127.0.0.1:8000/. You can also get an automatically generated interactive list of all your API methods by appending <code>/docs</code> to the url. This is one of my favorite features of FastAPI.</p>
-<h1 id="mongodb">MongoDB<a hidden class="anchor" aria-hidden="true" href="#mongodb">#</a></h1>
+<h2 id="mongodb">MongoDB<a hidden class="anchor" aria-hidden="true" href="#mongodb">#</a></h2>
 <p>You can setup a MongoDB server locally, but I wanted to get more experience working with SASS, so I signed up to use <a href="https://www.mongodb.com/atlas/database">MongoDB&rsquo;s Atlas</a> free tier. I also installed <a href="https://www.mongodb.com/products/shell">MongoDB Shell</a> and <a href="https://www.mongodb.com/products/compass">MongoDB Compass</a> - the command line and graphical interfaces.</p>
 <p>In the Atlas web interface, I then created a cluster, choosing AWS, and got the connection information by clicking the <strong>connect</strong> button in the main dashboard and following the direction for <strong>Mongo Shell</strong>. Once connected, I created a new database called &ldquo;notes&rdquo; by running <code>use notes</code></p>
 <p>I wanted to add some dummy data, so, to create a collection called <code>board01</code> and insert some data I ran:</p>
@@ -238,7 +238,7 @@ app<span style="color:#f92672">.</span>add_middleware(
 <p>To confirm, I viewed the results in Compass:
 <img loading="lazy" src="/images/2023-09-14_01.png#center" alt="screenshot"  />
 </p>
-<h1 id="connecting-fastapi-to-mongodb">Connecting FastAPI to MongoDB<a hidden class="anchor" aria-hidden="true" href="#connecting-fastapi-to-mongodb">#</a></h1>
+<h2 id="connecting-fastapi-to-mongodb">Connecting FastAPI to MongoDB<a hidden class="anchor" aria-hidden="true" href="#connecting-fastapi-to-mongodb">#</a></h2>
 <p>To connect the FastAPI backend to the Mongo database, I created a file, <code>database.py</code>. Here, I used the <strong>motor</strong> python module to create functions that will be called by main.py. I also created a separate <code>keys.env</code> to more securly insert my Mongo Atlas credentials, then loaded those using <strong>dotenv</strong>. Here&rsquo;s what that ended up looking like:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> os
 <span style="color:#f92672">from</span> bson <span style="color:#f92672">import</span> ObjectId
@@ -306,7 +306,7 @@ MONGO_PASS=mypassphrase
     response <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> database<span style="color:#f92672">.</span>remove_card(id)
     <span style="color:#66d9ef">return</span> response
 </code></pre></div><p>I used the interface that is generated by FastAPI at http://127.0.0.1:8000/docs to confirm that each function worked. With that, the basic backend was finished and I just needed to create the frontend interface.</p>
-<h1 id="react">React<a hidden class="anchor" aria-hidden="true" href="#react">#</a></h1>
+<h2 id="react">React<a hidden class="anchor" aria-hidden="true" href="#react">#</a></h2>
 <p>In the <code>/notes/frontend</code> folder, I initialized a new React project by running:</p>
 <p><code>npx create-react-app</code></p>
 <p>Then, I ran the local dev server using:</p>
@@ -459,7 +459,7 @@ MONGO_PASS=mypassphrase
 <p>After that I spent way too long working on css to create a passable aesthetic, and I&rsquo;m pretty happy how it turned out:</p>
 <p><img loading="lazy" src="/images/2023-09-14_02.png#center" alt="screenshot"  />
 </p>
-<h1 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h1>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
 <p>I am looking forward to using this project to learn more about Docker, CI/CD, IAC, and other platform engineering practices.</p>
 <p>You can find the repo with all the code here - <a href="https://github.com/rickthackeray/notes">https://github.com/rickthackeray/notes</a></p>
 <p>Cheers!<br>
