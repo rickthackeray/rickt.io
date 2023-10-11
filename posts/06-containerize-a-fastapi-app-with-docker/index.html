@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Containerize a FastAPI App with Docker | Learning with Rick</title>
+<meta name="keywords" content="">
+<meta name="description" content="Introduction In my ongoing effort to learn modern software development and deployment, today I wanted to containerize the FastAPI backend of the notes app that I created previously with Docker.
+Getting Started I started off by creating a Dockerfile. Well, I really started off by questioning whether my flat folder structure was best practice (it clearly isn&rsquo;t), but decided that it would be better to focus my attention on the learning task at hand.">
+<meta name="author" content="">
+<link rel="canonical" href="https://rickt.io/posts/06-containerize-a-fastapi-app-with-docker/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.bccfefac377bc340f06c260aed1bddf49a4354816d7c570d6aac75a997986c95.css" integrity="sha256-vM/vrDd7w0DwbCYK7Rvd9JpDVIFtfFcNaqx1qZeYbJU=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://rickt.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://rickt.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://rickt.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://rickt.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://rickt.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Containerize a FastAPI App with Docker" />
+<meta property="og:description" content="Introduction In my ongoing effort to learn modern software development and deployment, today I wanted to containerize the FastAPI backend of the notes app that I created previously with Docker.
+Getting Started I started off by creating a Dockerfile. Well, I really started off by questioning whether my flat folder structure was best practice (it clearly isn&rsquo;t), but decided that it would be better to focus my attention on the learning task at hand." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rickt.io/posts/06-containerize-a-fastapi-app-with-docker/" />
+<meta property="og:image" content="https://rickt.io/images/fastapi-docker.svg" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-10-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-10-10T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://rickt.io/images/fastapi-docker.svg" />
+<meta name="twitter:title" content="Containerize a FastAPI App with Docker"/>
+<meta name="twitter:description" content="Introduction In my ongoing effort to learn modern software development and deployment, today I wanted to containerize the FastAPI backend of the notes app that I created previously with Docker.
+Getting Started I started off by creating a Dockerfile. Well, I really started off by questioning whether my flat folder structure was best practice (it clearly isn&rsquo;t), but decided that it would be better to focus my attention on the learning task at hand."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://rickt.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Containerize a FastAPI App with Docker",
+      "item": "https://rickt.io/posts/06-containerize-a-fastapi-app-with-docker/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Containerize a FastAPI App with Docker",
+  "name": "Containerize a FastAPI App with Docker",
+  "description": "Introduction In my ongoing effort to learn modern software development and deployment, today I wanted to containerize the FastAPI backend of the notes app that I created previously with Docker.\nGetting Started I started off by creating a Dockerfile. Well, I really started off by questioning whether my flat folder structure was best practice (it clearly isn\u0026rsquo;t), but decided that it would be better to focus my attention on the learning task at hand.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Introduction In my ongoing effort to learn modern software development and deployment, today I wanted to containerize the FastAPI backend of the notes app that I created previously with Docker.\nGetting Started I started off by creating a Dockerfile. Well, I really started off by questioning whether my flat folder structure was best practice (it clearly isn’t), but decided that it would be better to focus my attention on the learning task at hand. So, I created a file called Dockerfile in the root of my backend folder and added the following:\nFROMpython:3.10-slimCOPY . ./appWORKDIR/appRUN pip3 install -r requirements.txtEXPOSE8000CMD [\"uvicorn\", \"main:app\", \"--host=0.0.0.0\"]This is the file Docker uses when building the image. Here’s a quick rundown of what is does:\nFROM python:3.10-slim - The image it starts with, which is made up a very trimmed down version of Linux and Python 3.10\nCOPY . ./app - Copies all files in the local folder to the image’s filesystem under /app\nWORKDIR /app - Sets the working directory to /app for commands that follow\nRUN pip3 install -r requirements.txt - Runs the command to install python dependencies with pip\nEXPOSE 8000 - This tells Docker that the container listens at port 8000 (but doesn’t open it to the host)\nCMD [\"uvicorn\", \"main:app\", \"--host=0.0.0.0\"] - Sets the default execution command for running the container, which can be overwritten at runtime\nWith the Dockerfile ready, I could build a new image by running docker build with an option name (tag): docker build -t notes-api .\nThat worked, and I was able to run the container, mapping port 8000 from the host to the container using: docker run -p 8000:8000 notes-api .\nIt all worked, great!\nThere was a problem, though. I knew full well that my new image now contained my MongoDB Atlas credentials that would be exposed to the internet should I upload it to Docker Hub - not a best practice to say the least. So I needed to find a solution for mitigating that security risk.\nHandling Secrets It was surprising difficult to find information on how to handle secrets when creating images without greatly increasing complexity. It seems like everyone uses a secrets manager like Hashicorp’s Vault or doesn’t want to talk about their practice, perhaps because they aren’t proud of it. I would like to learn Vault, but that’s going to have to be further down the road. So for now here is what I came up with:\nI had already built my code to keep it’s secrets in a separate keys.env file, so I just needed to exclude that at the image build, then re-add it at container runtime. To do that, I created a .dockerignore with the following:\nenv/ __pycache__/ *.env *.env.* env.* docker-compose.yaml I reran the build, then ran the container using the same docker run -p 8000:8000 notes-api . command and got this:\nWhich seemed bad, but then I remembered that it should break, because it no longer had the credentials! So I had to figure out how to inject the keys.env into the container at runtime, which led me to learning about Docker Volumes. Essentially, I could give the container access to part of the host’s filesystem. Here is the command I used for that: docker run -p 8000:8000 -v ./:/app notes-api\nSuccess!\nThere was just one more quality of life improvement I wanted to implement. I knew from working with Docker before (see Docker for Home Services) that defining all of your runtime arguments using the CLI was not ideal, especially as a project grows in complexity. So, the last step was to create a docker-compose file.\nAdding Docker-Compose I know this isn’t totally necessary with such a simple app that will run in only one container, but it’s relatively simple to implement and helps me build skills I anticipate needing in the future.\nAfter looking at my previous examples and some others specific to FastAPI, I ended up with this:\nname: notes services: api: build: . command: sh -c \"uvicorn main:app --port=8000 --host=0.0.0.0\" ports: - 8000:8000 volumes: - ./:/app Now I could run the container with a simple docker compose up\nCool!\nConclusion I enjoyed this step in learning modern software development and deployment. It’s a very rewarding feeling to build something and to tackle problems as they arise. I also appreciate having a project that I’ve built from scratch, which I can use to learn each new technology or practice.\nI am excited and looking forward to the next thing to learn. Until then…\nCheers!\nRick\n",
+  "wordCount" : "754",
+  "inLanguage": "en",
+  "image":"https://rickt.io/images/fastapi-docker.svg","datePublished": "2023-10-10T00:00:00Z",
+  "dateModified": "2023-10-10T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://rickt.io/posts/06-containerize-a-fastapi-app-with-docker/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Learning with Rick",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://rickt.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://rickt.io/" accesskey="h" title="Learning with Rick (Alt + H)">Learning with Rick</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://rickt.io/">Home</a>&nbsp;»&nbsp;<a href="https://rickt.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Containerize a FastAPI App with Docker
+    </h1>
+    <div class="post-meta"><span title='2023-10-10 00:00:00 +0000 UTC'>October 10, 2023</span>&nbsp;·&nbsp;4 min
+
+</div>
+  </header> 
+<figure class="entry-cover"><img loading="lazy" src="https://rickt.io/images/fastapi-docker.svg" alt="">
+        
+</figure>
+  <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
+<p>In my ongoing effort to learn modern software development and deployment, today I wanted to containerize the FastAPI backend of the <a href="https://rickt.io/posts/04-creating-a-basic-notes-app-using-the-farm-stack/">notes app that I created previously</a> with Docker.</p>
+<h2 id="getting-started">Getting Started<a hidden class="anchor" aria-hidden="true" href="#getting-started">#</a></h2>
+<p>I started off by creating a Dockerfile. Well, I really started off by questioning whether my flat folder structure was best practice (it clearly isn&rsquo;t), but decided that it would be better to focus my attention on the learning task at hand. So, I created a file called <code>Dockerfile</code> in the root of my backend folder and added the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Docker" data-lang="Docker"><span style="color:#66d9ef">FROM</span><span style="color:#e6db74"> python:3.10-slim</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> . ./app<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">WORKDIR</span><span style="color:#e6db74"> /app</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">RUN</span> pip3 install -r requirements.txt<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">EXPOSE</span><span style="color:#e6db74"> 8000</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;uvicorn&#34;</span>, <span style="color:#e6db74">&#34;main:app&#34;</span>, <span style="color:#e6db74">&#34;--host=0.0.0.0&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>This is the file Docker uses when building the image. Here&rsquo;s a quick rundown of what is does:</p>
+<p><code>FROM python:3.10-slim</code> - The image it starts with, which is made up a very trimmed down version of Linux and Python 3.10<br>
+<code>COPY . ./app</code> - Copies all files in the local folder to the image&rsquo;s filesystem under /app<br>
+<code>WORKDIR /app</code> - Sets the working directory to /app for commands that follow<br>
+<code>RUN pip3 install -r requirements.txt</code> - Runs the command to install python dependencies with pip<br>
+<code>EXPOSE 8000</code> - This tells Docker that the container listens at port 8000 (but doesn&rsquo;t open it to the host)<br>
+<code>CMD [&quot;uvicorn&quot;, &quot;main:app&quot;, &quot;--host=0.0.0.0&quot;]</code> - Sets the default execution command for running the container, which can be overwritten at runtime</p>
+<p>With the Dockerfile ready, I could build a new image by running docker build with an option name (tag): <code>docker build -t notes-api .</code></p>
+<p>That worked, and I was able to run the container, mapping port 8000 from the host to the container using: <code>docker run -p 8000:8000 notes-api .</code></p>
+<p><img loading="lazy" src="/images/2023-10-10_01.png#center" alt="screenshot"  />
+</p>
+<p>It all worked, great!</p>
+<p>There was a problem, though. I knew full well that my new image now contained my MongoDB Atlas credentials that would be exposed to the internet should I upload it to Docker Hub - not a best practice to say the least. So I needed to find a solution for mitigating that security risk.</p>
+<h2 id="handling-secrets">Handling Secrets<a hidden class="anchor" aria-hidden="true" href="#handling-secrets">#</a></h2>
+<p>It was surprising difficult to find information on how to handle secrets when creating images without greatly increasing complexity. It seems like everyone uses a secrets manager like Hashicorp&rsquo;s Vault or doesn&rsquo;t want to talk about their practice, perhaps because they aren&rsquo;t proud of it. I would like to learn Vault, but that&rsquo;s going to have to be further down the road. So for now here is what I came up with:</p>
+<p>I had already built my code to keep it&rsquo;s secrets in a separate <code>keys.env</code> file, so I just needed to exclude that at the image build, then re-add it at container runtime. To do that, I created a <code>.dockerignore</code> with the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">env/
+__pycache__/
+
+*.env
+*.env.*
+env.*
+docker-compose.yaml
+</code></pre></div><p>I reran the build, then ran the container using the same <code>docker run -p 8000:8000 notes-api .</code> command and got this:</p>
+<p><img loading="lazy" src="/images/2023-10-10_02.png#center" alt="screenshot"  />
+</p>
+<p>Which seemed bad, but then I remembered that it <strong>should</strong> break, because it no longer had the credentials! So I had to figure out how to inject the <code>keys.env</code> into the container at runtime, which led me to learning about Docker Volumes. Essentially, I could give the container access to part of the host&rsquo;s filesystem. Here is the command I used for that: <code>docker run -p 8000:8000 -v ./:/app notes-api</code></p>
+<p><img loading="lazy" src="/images/2023-10-10_03.png#center" alt="screenshot"  />
+</p>
+<p>Success!</p>
+<p>There was just one more quality of life improvement I wanted to implement. I knew from working with Docker before (see <a href="https://rickt.io/posts/01-docker-for-home-services/">Docker for Home Services</a>) that defining all of your runtime arguments using the CLI was not ideal, especially as a project grows in complexity. So, the last step was to create a docker-compose file.</p>
+<h2 id="adding-docker-compose">Adding Docker-Compose<a hidden class="anchor" aria-hidden="true" href="#adding-docker-compose">#</a></h2>
+<p>I know this isn&rsquo;t totally necessary with such a simple app that will run in only one container, but it&rsquo;s relatively simple to implement and helps me build skills I anticipate needing in the future.</p>
+<p>After looking at my previous examples and some others specific to FastAPI, I ended up with this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">notes</span>
+<span style="color:#f92672">services</span>:
+  <span style="color:#f92672">api</span>:
+    <span style="color:#f92672">build</span>: <span style="color:#ae81ff">.</span>
+    <span style="color:#f92672">command</span>: <span style="color:#ae81ff">sh -c &#34;uvicorn main:app --port=8000 --host=0.0.0.0&#34;</span>
+    <span style="color:#f92672">ports</span>:
+      - <span style="color:#ae81ff">8000</span>:<span style="color:#ae81ff">8000</span>
+    <span style="color:#f92672">volumes</span>:
+      - <span style="color:#ae81ff">./:/app</span>
+</code></pre></div><p>Now I could run the container with a simple <code>docker compose up</code></p>
+<p><img loading="lazy" src="/images/2023-10-10_04.png#center" alt="screenshot"  />
+</p>
+<p>Cool!</p>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>I enjoyed this step in learning modern software development and deployment. It&rsquo;s a very rewarding feeling to build something and to tackle problems as they arise. I also appreciate having a project that I&rsquo;ve built from scratch, which I can use to learn each new technology or practice.</p>
+<p>I am excited and looking forward to the next thing to learn. Until then&hellip;</p>
+<p>Cheers!<br>
+Rick</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://rickt.io/posts/05-parsing-csv-data-using-python/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Parsing CSV Data Using Python</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://rickt.io/">Learning with Rick</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

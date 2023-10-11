@@ -6,9 +6,19 @@
     <description>Recent content in Posts on Learning with Rick</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 05 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 Oct 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Parsing CSV data using Python</title>
+      <title>Containerize a FastAPI App with Docker</title>
+      <link>https://rickt.io/posts/06-containerize-a-fastapi-app-with-docker/</link>
+      <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://rickt.io/posts/06-containerize-a-fastapi-app-with-docker/</guid>
+      <description>Introduction In my ongoing effort to learn modern software development and deployment, today I wanted to containerize the FastAPI backend of the notes app that I created previously with Docker.
+Getting Started I started off by creating a Dockerfile. Well, I really started off by questioning whether my flat folder structure was best practice (it clearly isn&amp;rsquo;t), but decided that it would be better to focus my attention on the learning task at hand.</description>
+    </item>
+    
+    <item>
+      <title>Parsing CSV Data Using Python</title>
       <link>https://rickt.io/posts/05-parsing-csv-data-using-python/</link>
       <pubDate>Thu, 05 Oct 2023 00:00:00 +0000</pubDate>
       
@@ -18,7 +28,7 @@ The problem I wanted to solve was that I needed to take a pool of digital cards 
     </item>
     
     <item>
-      <title>Creating a Notes app with FARM stack</title>
+      <title>Creating a Notes App with FARM Stack</title>
       <link>https://rickt.io/posts/04-creating-a-basic-notes-app-using-the-farm-stack/</link>
       <pubDate>Thu, 14 Sep 2023 00:00:00 +0000</pubDate>
       
@@ -27,7 +37,7 @@ The problem I wanted to solve was that I needed to take a pool of digital cards 
     </item>
     
     <item>
-      <title>Updating a CSV using Powershell</title>
+      <title>Updating a CSV Using Powershell</title>
       <link>https://rickt.io/posts/03-updating-a-csv-using-powershell/</link>
       <pubDate>Tue, 18 Jul 2023 00:00:00 +0000</pubDate>
       
@@ -37,7 +47,7 @@ Fortunately, I had a use case recently where Powershell would be a great tool.</
     </item>
     
     <item>
-      <title>Deploying a website to S3 using AWS CLI</title>
+      <title>Deploying a Website to S3 Using AWS CLI</title>
       <link>https://rickt.io/posts/02-deploying-a-website-to-s3-using-aws-cli/</link>
       <pubDate>Thu, 29 Jun 2023 00:00:00 +0000</pubDate>
       
@@ -47,7 +57,7 @@ I had set up a simple website on S3 using the graphical interface before, so thi
     </item>
     
     <item>
-      <title>Docker for home services</title>
+      <title>Docker for Home Services</title>
       <link>https://rickt.io/posts/01-docker-for-home-services/</link>
       <pubDate>Mon, 30 Jan 2023 00:00:00 +0000</pubDate>
       
