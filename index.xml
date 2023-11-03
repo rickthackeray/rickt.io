@@ -13,7 +13,7 @@
       <pubDate>Tue, 10 Oct 2023 00:00:00 +0000</pubDate>
       
       <guid>https://rickt.io/posts/06-containerize-a-fastapi-app-with-docker/</guid>
-      <description>Introduction In my ongoing effort to learn modern software development and deployment, today I wanted to containerize the FastAPI backend of the notes app that I created previously with Docker.
+      <description>Introduction In my ongoing effort to learn the tools and practices for DevOps engineering, today I wanted to containerize the FastAPI backend of the notes app that I created previously, using Docker.
 Getting Started I started off by creating a Dockerfile. Well, I really started off by questioning whether my flat folder structure was best practice (it clearly isn&amp;rsquo;t), but decided that it would be better to focus my attention on the learning task at hand.</description>
     </item>
     
