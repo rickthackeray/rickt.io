@@ -28,6 +28,8 @@
   </url><url>
     <loc>https://rickt.io/categories/</loc>
   </url><url>
+    <loc>https://rickt.io/posts/07-deploying-fastapi-to-aws-lambda/</loc>
+  </url><url>
     <loc>https://rickt.io/tags/</loc>
   </url>
 </urlset>

@@ -66,5 +66,15 @@ I had set up a simple website on S3 using the graphical interface before, so thi
 I&amp;rsquo;ve long hosted various services for myself at home. In the past these were ran on separate Windows VMs so that I could better learn the skills needed for the work I was doing.</description>
     </item>
     
+    <item>
+      <title>Deploying a FastAPI Container to AWS with ECS</title>
+      <link>https://rickt.io/posts/07-deploying-fastapi-to-aws-lambda/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rickt.io/posts/07-deploying-fastapi-to-aws-lambda/</guid>
+      <description>Introduction In my latest efforts to learn more about DevOps tools and practices, I set out to deploy the Docker image for my FastAPI app API to AWS. You can read about the process of building the image in my last post.
+Initially, I was overwhelmed by the many ways to run containers on AWS. I mistakenly decided to try Lambda - partially to use the most &amp;ldquo;serverless&amp;rdquo; method I could, but mostly to be as cheap as possible.</description>
+    </item>
+    
   </channel>
 </rss>
