@@ -2,13 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://rickt.io/posts/07-deploying-fastapi-to-aws-ecs/</loc>
-    <lastmod>2023-11-07T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://rickt.io/</loc>
-    <lastmod>2023-11-07T00:00:00+00:00</lastmod>
+    <lastmod>2023-11-10T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://rickt.io/posts/</loc>
+    <lastmod>2023-11-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://rickt.io/posts/08-setting-up-github-actions-to-deploy-to-ecs/</loc>
+    <lastmod>2023-11-10T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://rickt.io/posts/07-deploying-fastapi-to-aws-ecs/</loc>
     <lastmod>2023-11-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://rickt.io/posts/06-containerize-a-fastapi-app-with-docker/</loc>
