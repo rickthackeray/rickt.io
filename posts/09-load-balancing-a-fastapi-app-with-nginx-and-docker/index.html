@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Load Balancing Using Nginx and Docker | Learning with Rick</title>
+<meta name="keywords" content="">
+<meta name="description" content="Introduction In my ongoing effort to learn DevOps tools and practices, today I&rsquo;d like to share my experience setting up scaling for the FastAPI back end of my notes app, using Docker&rsquo;s Compose feature as well as setting up the incredibly common webserver, Nginx, as a load balancer.
+Setup To get started, I made a new git branch of my project&rsquo;s repo. This wasn&rsquo;t super necessary since this is a relatively simple project that I alone work on, but I wanted to get more practice with an important part of the git ecosystem.">
+<meta name="author" content="">
+<link rel="canonical" href="https://rickt.io/posts/09-load-balancing-a-fastapi-app-with-nginx-and-docker/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.c298361a052d70fd4ce0d87fac47d88fb063528ceab06c67a460167c3d399bdc.css" integrity="sha256-wpg2GgUtcP1M4Nh/rEfYj7BjUozqsGxnpGAWfD05m9w=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://rickt.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://rickt.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://rickt.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://rickt.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://rickt.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Load Balancing Using Nginx and Docker" />
+<meta property="og:description" content="Introduction In my ongoing effort to learn DevOps tools and practices, today I&rsquo;d like to share my experience setting up scaling for the FastAPI back end of my notes app, using Docker&rsquo;s Compose feature as well as setting up the incredibly common webserver, Nginx, as a load balancer.
+Setup To get started, I made a new git branch of my project&rsquo;s repo. This wasn&rsquo;t super necessary since this is a relatively simple project that I alone work on, but I wanted to get more practice with an important part of the git ecosystem." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rickt.io/posts/09-load-balancing-a-fastapi-app-with-nginx-and-docker/" />
+<meta property="og:image" content="https://rickt.io/images/docker-nginx.svg" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-11-28T00:00:00+00:00" />
+<meta property="article:modified_time" content="2023-11-28T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://rickt.io/images/docker-nginx.svg" />
+<meta name="twitter:title" content="Load Balancing Using Nginx and Docker"/>
+<meta name="twitter:description" content="Introduction In my ongoing effort to learn DevOps tools and practices, today I&rsquo;d like to share my experience setting up scaling for the FastAPI back end of my notes app, using Docker&rsquo;s Compose feature as well as setting up the incredibly common webserver, Nginx, as a load balancer.
+Setup To get started, I made a new git branch of my project&rsquo;s repo. This wasn&rsquo;t super necessary since this is a relatively simple project that I alone work on, but I wanted to get more practice with an important part of the git ecosystem."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://rickt.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Load Balancing Using Nginx and Docker",
+      "item": "https://rickt.io/posts/09-load-balancing-a-fastapi-app-with-nginx-and-docker/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Load Balancing Using Nginx and Docker",
+  "name": "Load Balancing Using Nginx and Docker",
+  "description": "Introduction In my ongoing effort to learn DevOps tools and practices, today I\u0026rsquo;d like to share my experience setting up scaling for the FastAPI back end of my notes app, using Docker\u0026rsquo;s Compose feature as well as setting up the incredibly common webserver, Nginx, as a load balancer.\nSetup To get started, I made a new git branch of my project\u0026rsquo;s repo. This wasn\u0026rsquo;t super necessary since this is a relatively simple project that I alone work on, but I wanted to get more practice with an important part of the git ecosystem.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Introduction In my ongoing effort to learn DevOps tools and practices, today I’d like to share my experience setting up scaling for the FastAPI back end of my notes app, using Docker’s Compose feature as well as setting up the incredibly common webserver, Nginx, as a load balancer.\nSetup To get started, I made a new git branch of my project’s repo. This wasn’t super necessary since this is a relatively simple project that I alone work on, but I wanted to get more practice with an important part of the git ecosystem. To make the new branch and immediately check it out I ran git checkout -b scaling\nI then confirmed that I could still locally build and run the Dockerfile I had created previously, making note that the uvicorn webserver was running on port 8000 within the container.\nDocker Compose I created a new file: docker-compose.yaml and added the following:\nname: notes services: api: build: . command: sh -c \"uvicorn main:app --port=8000 --host=0.0.0.0\" ports: - \"8000:8000\" volumes: - ./keys.env:/app/keys.env Then, I tested it out by running docker compose up, which worked:\nNow, I could scale up the number of containers easily by adding the scale parameter, along with the name of the service and number of containers to spin up: --scale api=3, which didn’t work.\nThis was expected, though, because I knew you cannot bind multiple services (containers in this case) to a single local port. To make this work, I removed the static port mapping from docker-compose.yaml like so:\nports: - \"8000\" Now, Docker would map a random open local port to each container, which it did:\nAs you can see, I also added -d to detach from the console outputs. I also ran docker ps to show the next hurdle to beat - each container is now on a separate random port that you can go to individually in a browser, but there isn’t a single address that points to them all at once. Here is an example of one:\nWe need to put a load balancer in front of them.\nNginx The cool thing about using Docker is that we can simply add Nginx as part of our docker-compose.yaml definitions. Here is what I added to do that:\nnginx: image: nginx:latest volumes: - ./nginx.conf:/etc/nginx/nginx.conf:ro depends_on: - api ports: - \"80:80\" Along with that modification, I needed to create the nginx.conf file that I defined in the volumes: section:\nevents { worker_connections 1000; } http { server { listen 80; location / { proxy_pass http://api:8000; } } } I reran docker compose up --scale api=3 -d and it seemed to work in the browser, but I couldn’t tell which container I was getting to make sure it was balancing. To give this visibility, I added the following to the main.py file of my FastAPI app:\nimport socket @app.get(\"/\") async def root(): return {f\"Container ID: {socket.gethostname()}\"} I tried rerunning docker compose up again, but found that it wasn’t rebuilding the image. To fix this and force it to rebuild, I added --build to get docker compose up --scale api=3 -d --build\nIt worked!\nCuriosity In writing this up, I realized I didn’t know why the load balancing worked. How did Nginx know where to find each app server instance? I also couldn’t find anyone who really explained it in the tutorials I used. So, I followed what I saw in the configuration files along with what I know about networking.\nI looked at the line I had added to the nginx.conf file that said proxy_pass http://api:8000;. I noticed that the URL http://api must have something to do with it. So, after poking around the running containers for a while, I put it together when I ran a dig command on the container running Nginx:\nIt was a simple round robin DNS entry that must have been created by Docker - pretty cool! I found the same DNS entries in each of the app containers, but they didn’t function as a round robin presumably because of the default order of DNS resolution, they return their local IP only.\nDocker Compose gotcha I just wanted to point out one thing that gave me difficulty in case it helps anyone else. I was having trouble with one of my docker compose commands (build). It took me a while to realize that I was using a deprecated version of Compose even though I had the latest version of Docker. This is because they changed it from a separate program, which you ran using docker-compose (note the dash), to being a sub-command of the main program by running docker compose. Somehow I had both versions on my system.\nConclusion This was a really fun one and surprisingly relatively easy. I was able to do the main implementation so fast, that I thought I might continue to the deployment stage, where I’m currently hosting the app using AWS ECS and make sure the Github Actions that I set up last time still worked, but it occurred to me that I already had a lot to write up to show how I got it to run locally. Taking on something as big as learning DevOps tools and practices can only happen incrementally.\nI’m also not sure that I would use Docker Compose and Nginx for the AWS deployment. It might make more sense to use the AWS native solutions - something I look forward to researching next time.\nCheers!\nRick\n   Resources  Flask Load Balancing Using Nginx and Docker (DevGuyAhnaf) - https://www.youtube.com/watch?v=42Q65H8ch7U \\  ",
+  "wordCount" : "918",
+  "inLanguage": "en",
+  "image":"https://rickt.io/images/docker-nginx.svg","datePublished": "2023-11-28T00:00:00Z",
+  "dateModified": "2023-11-28T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://rickt.io/posts/09-load-balancing-a-fastapi-app-with-nginx-and-docker/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Learning with Rick",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://rickt.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://rickt.io/" accesskey="h" title="Learning with Rick (Alt + H)">Learning with Rick</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://rickt.io/">Home</a>&nbsp;»&nbsp;<a href="https://rickt.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Load Balancing Using Nginx and Docker
+    </h1>
+    <div class="post-meta"><span title='2023-11-28 00:00:00 +0000 UTC'>November 28, 2023</span>&nbsp;·&nbsp;5 min
+
+</div>
+  </header> 
+<figure class="entry-cover"><img loading="lazy" src="https://rickt.io/images/docker-nginx.svg" alt="">
+        
+</figure>
+  <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
+<p>In my ongoing effort to learn DevOps tools and practices, today I&rsquo;d like to share my experience setting up scaling for the FastAPI back end of my <a href="https://rickt.io/posts/04-creating-a-basic-notes-app-using-the-farm-stack/">notes app</a>, using Docker&rsquo;s Compose feature as well as setting up the incredibly common webserver, Nginx, as a load balancer.</p>
+<h2 id="setup">Setup<a hidden class="anchor" aria-hidden="true" href="#setup">#</a></h2>
+<p>To get started, I made a new git branch of my project&rsquo;s repo. This wasn&rsquo;t super necessary since this is a relatively simple project that I alone work on, but I wanted to get more practice with an important part of the git ecosystem. To make the new branch and immediately check it out I ran <code>git checkout -b scaling</code></p>
+<p>I then confirmed that I could still locally build and run the Dockerfile I had <a href="https://rickt.io/posts/06-containerize-a-fastapi-app-with-docker/">created previously</a>, making note that the uvicorn webserver was running on port 8000 within the container.</p>
+<h2 id="docker-compose">Docker Compose<a hidden class="anchor" aria-hidden="true" href="#docker-compose">#</a></h2>
+<p>I created a new file: <code>docker-compose.yaml</code> and added the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#f92672">name</span>: <span style="color:#ae81ff">notes</span>
+<span style="color:#f92672">services</span>:
+  <span style="color:#f92672">api</span>:
+    <span style="color:#f92672">build</span>: <span style="color:#ae81ff">.</span>
+    <span style="color:#f92672">command</span>: <span style="color:#ae81ff">sh -c &#34;uvicorn main:app --port=8000 --host=0.0.0.0&#34;</span>
+    <span style="color:#f92672">ports</span>:
+      - <span style="color:#e6db74">&#34;8000:8000&#34;</span>
+    <span style="color:#f92672">volumes</span>:
+      - <span style="color:#ae81ff">./keys.env:/app/keys.env</span>
+</code></pre></div><p>Then, I tested it out by running <code>docker compose up</code>, which worked:</p>
+<p><img loading="lazy" src="/images/2023-11-29_01.png#center" alt="screenshot"  />
+</p>
+<p>Now, I could scale up the number of containers easily by adding the scale parameter, along with the name of the service and number of containers to spin up: <code>--scale api=3</code>, which didn&rsquo;t work.</p>
+<p><img loading="lazy" src="/images/2023-11-29_02.png#center" alt="screenshot"  />
+</p>
+<p>This was expected, though, because I knew you cannot bind multiple services (containers in this case) to a single local port. To make this work, I removed the static port mapping from <code>docker-compose.yaml</code> like so:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">    <span style="color:#f92672">ports</span>:
+      - <span style="color:#e6db74">&#34;8000&#34;</span>
+</code></pre></div><p>Now, Docker would map a random open local port to each container, which it did:</p>
+<p><img loading="lazy" src="/images/2023-11-29_03.png#center" alt="screenshot"  />
+</p>
+<p>As you can see, I also added <code>-d</code> to detach from the console outputs. I also ran <code>docker ps</code> to show the next hurdle to beat - each container is now on a separate random port that you can go to individually in a browser, but there isn&rsquo;t a single address that points to them all at once. Here is an example of one:</p>
+<p><img loading="lazy" src="/images/2023-11-29_04.png#center" alt="screenshot"  />
+</p>
+<p>We need to put a load balancer in front of them.</p>
+<h2 id="nginx">Nginx<a hidden class="anchor" aria-hidden="true" href="#nginx">#</a></h2>
+<p>The cool thing about using Docker is that we can simply add Nginx as part of our <code>docker-compose.yaml</code> definitions. Here is what I added to do that:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">  <span style="color:#f92672">nginx</span>:
+    <span style="color:#f92672">image</span>: <span style="color:#ae81ff">nginx:latest</span>
+    <span style="color:#f92672">volumes</span>:
+      - <span style="color:#ae81ff">./nginx.conf:/etc/nginx/nginx.conf:ro</span>
+    <span style="color:#f92672">depends_on</span>:
+      - <span style="color:#ae81ff">api</span>
+    <span style="color:#f92672">ports</span>:
+      - <span style="color:#e6db74">&#34;80:80&#34;</span>
+</code></pre></div><p>Along with that modification, I needed to create the <code>nginx.conf</code> file that I defined in the <code>volumes:</code> section:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">events {
+    worker_connections 1000;
+}
+
+http {
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://api:8000;
+        }
+    }
+}
+</code></pre></div><p>I reran <code>docker compose up --scale api=3 -d</code> and it seemed to work in the browser, but I couldn&rsquo;t tell which container I was getting to make sure it was balancing. To give this visibility, I added the following to the <code>main.py</code> file of my FastAPI app:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> socket
+
+<span style="color:#a6e22e">@app</span><span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#34;/&#34;</span>)
+<span style="color:#66d9ef">async</span> <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">root</span>():
+    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Container ID: </span><span style="color:#e6db74">{</span>socket<span style="color:#f92672">.</span>gethostname()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>}
+
+</code></pre></div><p>I tried rerunning <code>docker compose up</code> again, but found that it wasn&rsquo;t rebuilding the image. To fix this and force it to rebuild, I added <code>--build</code> to get <code>docker compose up --scale api=3 -d --build</code></p>
+<p><img loading="lazy" src="/images/2023-11-29_06.gif#center" alt="screenshot"  />
+</p>
+<p>It worked!</p>
+<h2 id="curiosity">Curiosity<a hidden class="anchor" aria-hidden="true" href="#curiosity">#</a></h2>
+<p>In writing this up, I realized I didn&rsquo;t know why the load balancing worked. How did Nginx know where to find each app server instance? I also couldn&rsquo;t find anyone who really explained it in the tutorials I used. So, I followed what I saw in the configuration files along with what I know about networking.</p>
+<p>I looked at the line I had added to the <code>nginx.conf</code> file that said <code>proxy_pass http://api:8000;</code>. I noticed that the URL <code>http://api</code> must have something to do with it. So, after poking around the running containers for a while, I put it together when I ran a <code>dig</code> command on the container running Nginx:</p>
+<p><img loading="lazy" src="/images/2023-11-29_05.png#center" alt="screenshot"  />
+</p>
+<p>It was a simple round robin DNS entry that must have been created by Docker - pretty cool! I found the same DNS entries in each of the app containers, but they didn&rsquo;t function as a round robin presumably because of the default order of DNS resolution, they return their local IP only.</p>
+<h2 id="docker-compose-gotcha">Docker Compose gotcha<a hidden class="anchor" aria-hidden="true" href="#docker-compose-gotcha">#</a></h2>
+<p>I just wanted to point out one thing that gave me difficulty in case it helps anyone else. I was having trouble with one of my <code>docker compose</code> commands (build). It took me a while to realize that I was using a deprecated version of Compose even though I had the latest version of Docker. This is because they changed it from a separate program, which you ran using <code>docker-compose</code> (note the dash), to being a sub-command of the main program by running <code>docker compose</code>. Somehow I had both versions on my system.</p>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>This was a really fun one and surprisingly relatively easy. I was able to do the main implementation so fast, that I thought I might continue to the deployment stage, where I&rsquo;m currently <a href="https://rickt.io/posts/07-deploying-fastapi-to-aws-ecs/">hosting the app</a> using AWS ECS and make sure the Github Actions that I <a href="https://rickt.io/posts/08-setting-up-github-actions-to-deploy-to-ecs/">set up last time</a> still worked, but it occurred to me that I already had a lot to write up to show how I got it to run locally. Taking on something as big as learning DevOps tools and practices can only happen incrementally.</p>
+<p>I&rsquo;m also not sure that I would use Docker Compose and Nginx for the AWS deployment. It might make more sense to use the AWS native solutions - something I look forward to researching next time.</p>
+<p>Cheers!<br>
+Rick</p>
+<p> </p>
+<p> </p>
+<hr>
+<h3 id="resources">Resources<a hidden class="anchor" aria-hidden="true" href="#resources">#</a></h3>
+<ul>
+<li>Flask Load Balancing Using Nginx and Docker (DevGuyAhnaf) - <a href="https://www.youtube.com/watch?v=42Q65H8ch7U">https://www.youtube.com/watch?v=42Q65H8ch7U</a> \</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://rickt.io/posts/08-setting-up-github-actions-to-deploy-to-ecs/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Setting Up GitHub Actions to Deploy to ECS</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://rickt.io/">Learning with Rick</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

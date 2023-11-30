@@ -6,7 +6,17 @@
     <description>Recent content on Learning with Rick</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 28 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Load Balancing Using Nginx and Docker</title>
+      <link>https://rickt.io/posts/09-load-balancing-a-fastapi-app-with-nginx-and-docker/</link>
+      <pubDate>Tue, 28 Nov 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://rickt.io/posts/09-load-balancing-a-fastapi-app-with-nginx-and-docker/</guid>
+      <description>Introduction In my ongoing effort to learn DevOps tools and practices, today I&amp;rsquo;d like to share my experience setting up scaling for the FastAPI back end of my notes app, using Docker&amp;rsquo;s Compose feature as well as setting up the incredibly common webserver, Nginx, as a load balancer.
+Setup To get started, I made a new git branch of my project&amp;rsquo;s repo. This wasn&amp;rsquo;t super necessary since this is a relatively simple project that I alone work on, but I wanted to get more practice with an important part of the git ecosystem.</description>
+    </item>
+    
     <item>
       <title>Setting Up GitHub Actions to Deploy to ECS</title>
       <link>https://rickt.io/posts/08-setting-up-github-actions-to-deploy-to-ecs/</link>

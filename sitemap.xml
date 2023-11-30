@@ -3,10 +3,13 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://rickt.io/</loc>
-    <lastmod>2023-11-10T00:00:00+00:00</lastmod>
+    <lastmod>2023-11-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://rickt.io/posts/09-load-balancing-a-fastapi-app-with-nginx-and-docker/</loc>
+    <lastmod>2023-11-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://rickt.io/posts/</loc>
-    <lastmod>2023-11-10T00:00:00+00:00</lastmod>
+    <lastmod>2023-11-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://rickt.io/posts/08-setting-up-github-actions-to-deploy-to-ecs/</loc>
     <lastmod>2023-11-10T00:00:00+00:00</lastmod>
