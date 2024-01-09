@@ -209,33 +209,33 @@ Fortunately, I had a use case recently where Powershell would be a great tool."/
 <p>Then I uploaded it the web app and saw that the tags updated as expected.</p>
 <h2 id="adding-data-in-bulk">Adding Data in Bulk<a hidden class="anchor" aria-hidden="true" href="#adding-data-in-bulk">#</a></h2>
 <p>I had the basics laid out, now I needed to scale it up. The way I would do that would be to use a different web app that essentially let me select cards and export them to a text file. So, I would do that for one tag at a time, using the tag as the filename. Example:</p>
-<pre tabindex="0"><code>Spells.txt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">Spells.txt
 1 Bazaar of Baghdad
-1 Kolaghan's Command
+1 Kolaghan&#39;s Command
 1 Grapple with the Past
 1 Bonecrusher Giant
 1 Collective Brutality
 1 Territorial Kavu
 1 Scourge of Nel Toth
-1 Oona's Prowler
+1 Oona&#39;s Prowler
 1 Divest
-</code></pre><p>I had to parse one of these text files, striping the number, and add the name of the file (the tag) to each CSV entry that matched a line in the text file. Along with that I realized I needed to cover the common cases of a card already having the tag. Here&rsquo;s what I eventually ended up with:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-PowerShell" data-lang="PowerShell">        $cards = Get-Content $DeckFile
-        <span style="color:#66d9ef">foreach</span> ($card <span style="color:#66d9ef">in</span> $cards) {
-            $card = $card.Substring(2)
-            $csv | ForEach-Object {
-                <span style="color:#66d9ef">if</span> ($_.name <span style="color:#f92672">-eq</span> $card) {
-                    <span style="color:#66d9ef">if</span> (!($_.tags.Contains($tag))) {
-                        <span style="color:#66d9ef">if</span> ($_.tags <span style="color:#f92672">-eq</span> <span style="color:#e6db74">&#34;&#34;</span>) {
-                            $_.tags = $tag
+</code></pre></div><p>I had to parse one of these text files, striping the number, and add the name of the file (the tag) to each CSV entry that matched a line in the text file. Along with that I realized I needed to cover the common cases of a card already having the tag. Here&rsquo;s what I eventually ended up with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-PowerShell" data-lang="PowerShell">        <span style="color:#8be9fd;font-style:italic">$cards</span> = <span style="color:#8be9fd;font-style:italic">Get-Content</span> <span style="color:#8be9fd;font-style:italic">$DeckFile</span>
+        <span style="color:#ff79c6">foreach</span> (<span style="color:#8be9fd;font-style:italic">$card</span> <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">$cards</span>) {
+            <span style="color:#8be9fd;font-style:italic">$card</span> = <span style="color:#8be9fd;font-style:italic">$card</span>.Substring(2)
+            <span style="color:#8be9fd;font-style:italic">$csv</span> | <span style="color:#8be9fd;font-style:italic">ForEach-Object</span> {
+                <span style="color:#ff79c6">if</span> (<span style="color:#8be9fd;font-style:italic">$_</span>.name <span style="color:#ff79c6">-eq</span> <span style="color:#8be9fd;font-style:italic">$card</span>) {
+                    <span style="color:#ff79c6">if</span> (!(<span style="color:#8be9fd;font-style:italic">$_</span>.tags.Contains(<span style="color:#8be9fd;font-style:italic">$tag</span>))) {
+                        <span style="color:#ff79c6">if</span> (<span style="color:#8be9fd;font-style:italic">$_</span>.tags <span style="color:#ff79c6">-eq</span> <span style="color:#f1fa8c">&#34;&#34;</span>) {
+                            <span style="color:#8be9fd;font-style:italic">$_</span>.tags = <span style="color:#8be9fd;font-style:italic">$tag</span>
                         }
-                        <span style="color:#66d9ef">else</span> {
-                        $_.tags = $_.tags + <span style="color:#e6db74">&#34;;&#34;</span> + $tag
+                        <span style="color:#ff79c6">else</span> {
+                        <span style="color:#8be9fd;font-style:italic">$_</span>.tags = <span style="color:#8be9fd;font-style:italic">$_</span>.tags + <span style="color:#f1fa8c">&#34;;&#34;</span> + <span style="color:#8be9fd;font-style:italic">$tag</span>
                         }
-                    Write-Output <span style="color:#e6db74">&#34;Adding </span>$($tag)<span style="color:#e6db74"> to </span>$($card)<span style="color:#e6db74">&#34;</span>
+                    <span style="color:#8be9fd;font-style:italic">Write-Output</span> <span style="color:#f1fa8c">&#34;Adding </span>$(<span style="color:#8be9fd;font-style:italic">$tag</span>)<span style="color:#f1fa8c"> to </span>$(<span style="color:#8be9fd;font-style:italic">$card</span>)<span style="color:#f1fa8c">&#34;</span>
                     }
-                    <span style="color:#66d9ef">else</span> {
-                        Write-Verbose <span style="color:#e6db74">&#34;</span>$($card)<span style="color:#e6db74"> is already tagged with </span>$($tag)<span style="color:#e6db74">&#34;</span>
+                    <span style="color:#ff79c6">else</span> {
+                        <span style="color:#8be9fd;font-style:italic">Write-Verbose</span> <span style="color:#f1fa8c">&#34;</span>$(<span style="color:#8be9fd;font-style:italic">$card</span>)<span style="color:#f1fa8c"> is already tagged with </span>$(<span style="color:#8be9fd;font-style:italic">$tag</span>)<span style="color:#f1fa8c">&#34;</span>
                     }
                 }
             }
@@ -243,49 +243,49 @@ Fortunately, I had a use case recently where Powershell would be a great tool."/
 </code></pre></div><p>It&rsquo;s not the prettiest of logic, but it worked. The only improvement I wanted to make was to generalize it a bit more into a cmdlet.</p>
 <h2 id="putting-it-all-together">Putting it All Together<a hidden class="anchor" aria-hidden="true" href="#putting-it-all-together">#</a></h2>
 <p>Creating a cmdlet is pretty easy, but I do it seldom enough that I always forget the details. Luckily I made a <a href="https://gist.github.com/rickthackeray/da32e096f50ceb466db8fcdb60e195a7">gist</a> for it on GitHub. So, a copy/paste and few modifications later and I had the final product:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Powershell" data-lang="Powershell"><span style="color:#66d9ef">function</span> Add-TagsToCards {
-    [<span style="color:#66d9ef">CmdletBinding</span>()]
-    <span style="color:#66d9ef">Param</span>(
-        [<span style="color:#66d9ef">Parameter</span>(
-            <span style="color:#66d9ef">Position</span>=0,
-            <span style="color:#66d9ef">Mandatory</span>=$True,
-            <span style="color:#66d9ef">ValueFromPipeline</span>=$True
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Powershell" data-lang="Powershell"><span style="color:#ff79c6">function</span> <span style="color:#8be9fd;font-style:italic">Add-TagsToCards</span> {
+    [<span style="color:#ff79c6">CmdletBinding</span>()]
+    <span style="color:#ff79c6">Param</span>(
+        [<span style="color:#ff79c6">Parameter</span>(
+            <span style="color:#ff79c6">Position</span>=0,
+            <span style="color:#ff79c6">Mandatory</span>=<span style="color:#8be9fd;font-style:italic">$True</span>,
+            <span style="color:#ff79c6">ValueFromPipeline</span>=<span style="color:#8be9fd;font-style:italic">$True</span>
         )]
-        <span style="color:#66d9ef">[string]</span> $DeckFile,
-        [<span style="color:#66d9ef">Parameter</span>(
-            <span style="color:#66d9ef">Position</span>=1,
-            <span style="color:#66d9ef">Mandatory</span>=$False
+        [string] <span style="color:#8be9fd;font-style:italic">$DeckFile</span>,
+        [<span style="color:#ff79c6">Parameter</span>(
+            <span style="color:#ff79c6">Position</span>=1,
+            <span style="color:#ff79c6">Mandatory</span>=<span style="color:#8be9fd;font-style:italic">$False</span>
         )]
-        <span style="color:#66d9ef">[string]</span> $CubeCSV = <span style="color:#e6db74">&#34;./RicksAwesomeCube.csv&#34;</span>,
-        <span style="color:#66d9ef">[string]</span> $OutputCSV = <span style="color:#e6db74">&#34;./RicksAwesomeCube.csv&#34;</span>
+        [string] <span style="color:#8be9fd;font-style:italic">$CubeCSV</span> = <span style="color:#f1fa8c">&#34;./RicksAwesomeCube.csv&#34;</span>,
+        [string] <span style="color:#8be9fd;font-style:italic">$OutputCSV</span> = <span style="color:#f1fa8c">&#34;./RicksAwesomeCube.csv&#34;</span>
     )
-    <span style="color:#66d9ef">Process</span> {
-        $file = Get-ChildItem $DeckFile
-        $tag = $file.BaseName
+    <span style="color:#ff79c6">Process</span> {
+        <span style="color:#8be9fd;font-style:italic">$file</span> = <span style="color:#8be9fd;font-style:italic">Get-ChildItem</span> <span style="color:#8be9fd;font-style:italic">$DeckFile</span>
+        <span style="color:#8be9fd;font-style:italic">$tag</span> = <span style="color:#8be9fd;font-style:italic">$file</span>.BaseName
 
-        $csv = Import-Csv $CubeCSV
+        <span style="color:#8be9fd;font-style:italic">$csv</span> = <span style="color:#8be9fd;font-style:italic">Import-Csv</span> <span style="color:#8be9fd;font-style:italic">$CubeCSV</span>
         
-        $cards = Get-Content $DeckFile
-        <span style="color:#66d9ef">foreach</span> ($card <span style="color:#66d9ef">in</span> $cards) {
-            $card = $card.Substring(2)
-            $csv | ForEach-Object {
-                <span style="color:#66d9ef">if</span> ($_.name <span style="color:#f92672">-eq</span> $card) {
-                    <span style="color:#66d9ef">if</span> (!($_.tags.Contains($tag))) {
-                        <span style="color:#66d9ef">if</span> ($_.tags <span style="color:#f92672">-eq</span> <span style="color:#e6db74">&#34;&#34;</span>) {
-                            $_.tags = $tag
+        <span style="color:#8be9fd;font-style:italic">$cards</span> = <span style="color:#8be9fd;font-style:italic">Get-Content</span> <span style="color:#8be9fd;font-style:italic">$DeckFile</span>
+        <span style="color:#ff79c6">foreach</span> (<span style="color:#8be9fd;font-style:italic">$card</span> <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">$cards</span>) {
+            <span style="color:#8be9fd;font-style:italic">$card</span> = <span style="color:#8be9fd;font-style:italic">$card</span>.Substring(2)
+            <span style="color:#8be9fd;font-style:italic">$csv</span> | <span style="color:#8be9fd;font-style:italic">ForEach-Object</span> {
+                <span style="color:#ff79c6">if</span> (<span style="color:#8be9fd;font-style:italic">$_</span>.name <span style="color:#ff79c6">-eq</span> <span style="color:#8be9fd;font-style:italic">$card</span>) {
+                    <span style="color:#ff79c6">if</span> (!(<span style="color:#8be9fd;font-style:italic">$_</span>.tags.Contains(<span style="color:#8be9fd;font-style:italic">$tag</span>))) {
+                        <span style="color:#ff79c6">if</span> (<span style="color:#8be9fd;font-style:italic">$_</span>.tags <span style="color:#ff79c6">-eq</span> <span style="color:#f1fa8c">&#34;&#34;</span>) {
+                            <span style="color:#8be9fd;font-style:italic">$_</span>.tags = <span style="color:#8be9fd;font-style:italic">$tag</span>
                         }
-                        <span style="color:#66d9ef">else</span> {
-                        $_.tags = $_.tags + <span style="color:#e6db74">&#34;;&#34;</span> + $tag
+                        <span style="color:#ff79c6">else</span> {
+                        <span style="color:#8be9fd;font-style:italic">$_</span>.tags = <span style="color:#8be9fd;font-style:italic">$_</span>.tags + <span style="color:#f1fa8c">&#34;;&#34;</span> + <span style="color:#8be9fd;font-style:italic">$tag</span>
                         }
-                    Write-Output <span style="color:#e6db74">&#34;Adding </span>$($tag)<span style="color:#e6db74"> to </span>$($card)<span style="color:#e6db74">&#34;</span>
+                    <span style="color:#8be9fd;font-style:italic">Write-Output</span> <span style="color:#f1fa8c">&#34;Adding </span>$(<span style="color:#8be9fd;font-style:italic">$tag</span>)<span style="color:#f1fa8c"> to </span>$(<span style="color:#8be9fd;font-style:italic">$card</span>)<span style="color:#f1fa8c">&#34;</span>
                     }
-                    <span style="color:#66d9ef">else</span> {
-                        Write-Verbose <span style="color:#e6db74">&#34;</span>$($card)<span style="color:#e6db74"> is already tagged with </span>$($tag)<span style="color:#e6db74">&#34;</span>
+                    <span style="color:#ff79c6">else</span> {
+                        <span style="color:#8be9fd;font-style:italic">Write-Verbose</span> <span style="color:#f1fa8c">&#34;</span>$(<span style="color:#8be9fd;font-style:italic">$card</span>)<span style="color:#f1fa8c"> is already tagged with </span>$(<span style="color:#8be9fd;font-style:italic">$tag</span>)<span style="color:#f1fa8c">&#34;</span>
                     }
                 }
             }
         }
-        $csv | Export-Csv $OutputCSV
+        <span style="color:#8be9fd;font-style:italic">$csv</span> | <span style="color:#8be9fd;font-style:italic">Export-Csv</span> <span style="color:#8be9fd;font-style:italic">$OutputCSV</span>
     }
 }  
 </code></pre></div><h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
@@ -321,7 +321,7 @@ Rick</p>
     </main>
     
 <footer class="footer">
-    <span>&copy; 2023 <a href="https://rickt.io/">Learning with Rick</a></span>
+    <span>&copy; 2024 <a href="https://rickt.io/">Learning with Rick</a></span>
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &

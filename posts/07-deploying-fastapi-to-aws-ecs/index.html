@@ -196,15 +196,15 @@ Initially, I was overwhelmed by the many ways to run containers on AWS. I mistak
 <p>Initially, I was overwhelmed by the <a href="https://www.lastweekinaws.com/blog/the-17-ways-to-run-containers-on-aws/">many ways to run containers on AWS</a>. I mistakenly decided to try Lambda - partially to use the most &ldquo;serverless&rdquo; method I could, but mostly to be as cheap as possible. Many painful hours of not getting it to work later, and I decided to try out ECS instead. Either way, first I needed to push my Docker image to AWS ECR.</p>
 <h2 id="ecr-setup">ECR Setup<a hidden class="anchor" aria-hidden="true" href="#ecr-setup">#</a></h2>
 <p>I was able to do this part using the AWS CLI. First I created a new ECR repository:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">aws ecr create-repository --repository-name notes-api
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">aws ecr create-repository --repository-name notes-api
 </code></pre></div><p>Next, AWS gave instructions on how to authenticate the local Docker utility to my AWS:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin &lt;AWS ID&gt;.dkr.ecr.us-west-2.amazonaws.com
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin &lt;AWS ID&gt;.dkr.ecr.us-west-2.amazonaws.com
 </code></pre></div><p>I was able to get my AWS id using this command:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">aws sts get-caller-identity
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">aws sts get-caller-identity
 </code></pre></div><p>Then, AWS required a specific taging convention:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">docker tag notes-api:latest &lt;AWS ID&gt;.dkr.ecr.us-west-2.amazonaws.com/notes-api:latest
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">docker tag notes-api:latest &lt;AWS ID&gt;.dkr.ecr.us-west-2.amazonaws.com/notes-api:latest
 </code></pre></div><p>Finally, I was able to push the image to ECR using:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">docker push &lt;AWS ID&gt;.dkr.ecr.us-west-2.amazonaws.com/notes-api:latest
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">docker push &lt;AWS ID&gt;.dkr.ecr.us-west-2.amazonaws.com/notes-api:latest
 </code></pre></div><p>I verified that my image showed up in the web console and copied the image URI, so it was time to spin up an ECS cluster.</p>
 <h2 id="ecs-setup">ECS Setup<a hidden class="anchor" aria-hidden="true" href="#ecs-setup">#</a></h2>
 <p>I wasn&rsquo;t finding any real resources for setting up ECS using the CLI, so I did this part using the web console. I hate having to rely on a graphical interface, so I plan on learning some form of IaC for this in the future.</p>
@@ -277,7 +277,7 @@ Rick</p>
     </main>
     
 <footer class="footer">
-    <span>&copy; 2023 <a href="https://rickt.io/">Learning with Rick</a></span>
+    <span>&copy; 2024 <a href="https://rickt.io/">Learning with Rick</a></span>
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &

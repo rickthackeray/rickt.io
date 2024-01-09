@@ -197,7 +197,7 @@ The problem I wanted to solve was that I needed to take a pool of digital cards 
 <h2 id="inputs--outputs">Inputs / Outputs<a hidden class="anchor" aria-hidden="true" href="#inputs--outputs">#</a></h2>
 <p>The digital representation of my cards would come in as a CSV, which contained the name and color category information I would need.</p>
 <p>For output, I needed to have a text file that listed one card per line, with a blank line to separate each &ldquo;pack&rdquo;, like so:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">Blade Splicer (nph) 4
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">Blade Splicer (nph) 4
 Parallax Wave (vma) 37
 Ninja of the Deep Hours (mb1) 446
 Murktide Regent (mh2) 52
@@ -231,72 +231,72 @@ Xander&#39;s Lounge (snc) 260
 </code></pre></div><h2 id="getting-started">Getting Started<a hidden class="anchor" aria-hidden="true" href="#getting-started">#</a></h2>
 <p>After some searching, I found that the third-party <em><strong>pandas</strong></em> module looked like the easiest way to handle the CSV. At first I tried doing all of the manipulation using their data frame data type, but eventually found it easier to just convert it all into a dictionary, with lists for each card.</p>
 <p>I used a dictionary so that I could sort the cards into separate groups by their color. Here&rsquo;s what that looked like after struggling to get the right syntax:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> pandas
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">import</span> pandas
 
-input <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;RickTesting.csv&#34;</span>
+<span style="color:#8be9fd;font-style:italic">input</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;RickTesting.csv&#34;</span>
 
-cube <span style="color:#f92672">=</span> pandas<span style="color:#f92672">.</span>read_csv(input)
+cube <span style="color:#ff79c6">=</span> pandas<span style="color:#ff79c6">.</span>read_csv(<span style="color:#8be9fd;font-style:italic">input</span>)
 
-colors <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;White&#34;</span>,<span style="color:#e6db74">&#34;Blue&#34;</span>,<span style="color:#e6db74">&#34;Black&#34;</span>,<span style="color:#e6db74">&#34;Red&#34;</span>,<span style="color:#e6db74">&#34;Green&#34;</span>]
-colors_abv <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;w&#34;</span>,<span style="color:#e6db74">&#34;u&#34;</span>,<span style="color:#e6db74">&#34;b&#34;</span>,<span style="color:#e6db74">&#34;r&#34;</span>,<span style="color:#e6db74">&#34;g&#34;</span>]
+colors <span style="color:#ff79c6">=</span> [<span style="color:#f1fa8c">&#34;White&#34;</span>,<span style="color:#f1fa8c">&#34;Blue&#34;</span>,<span style="color:#f1fa8c">&#34;Black&#34;</span>,<span style="color:#f1fa8c">&#34;Red&#34;</span>,<span style="color:#f1fa8c">&#34;Green&#34;</span>]
+colors_abv <span style="color:#ff79c6">=</span> [<span style="color:#f1fa8c">&#34;w&#34;</span>,<span style="color:#f1fa8c">&#34;u&#34;</span>,<span style="color:#f1fa8c">&#34;b&#34;</span>,<span style="color:#f1fa8c">&#34;r&#34;</span>,<span style="color:#f1fa8c">&#34;g&#34;</span>]
 
-cards <span style="color:#f92672">=</span> {}
+cards <span style="color:#ff79c6">=</span> {}
 
-<span style="color:#75715e">## move from pandas data frame to dictionary of lists, organized by color</span>
-<span style="color:#66d9ef">for</span> color <span style="color:#f92672">in</span> colors:
-    cards[color] <span style="color:#f92672">=</span> cube[cube[<span style="color:#e6db74">&#39;Color Category&#39;</span>]<span style="color:#f92672">.</span>isin([color, colors_abv[colors<span style="color:#f92672">.</span>index(color)]])]<span style="color:#f92672">.</span>values<span style="color:#f92672">.</span>tolist()  
-cards[<span style="color:#e6db74">&#34;Other&#34;</span>] <span style="color:#f92672">=</span> cube[<span style="color:#f92672">~</span>cube[<span style="color:#e6db74">&#39;Color Category&#39;</span>]<span style="color:#f92672">.</span>isin([<span style="color:#f92672">*</span>colors, <span style="color:#f92672">*</span>colors_abv])]<span style="color:#f92672">.</span>values<span style="color:#f92672">.</span>tolist()
+<span style="color:#6272a4">## move from pandas data frame to dictionary of lists, organized by color</span>
+<span style="color:#ff79c6">for</span> color <span style="color:#ff79c6">in</span> colors:
+    cards[color] <span style="color:#ff79c6">=</span> cube[cube[<span style="color:#f1fa8c">&#39;Color Category&#39;</span>]<span style="color:#ff79c6">.</span>isin([color, colors_abv[colors<span style="color:#ff79c6">.</span>index(color)]])]<span style="color:#ff79c6">.</span>values<span style="color:#ff79c6">.</span>tolist()  
+cards[<span style="color:#f1fa8c">&#34;Other&#34;</span>] <span style="color:#ff79c6">=</span> cube[<span style="color:#ff79c6">~</span>cube[<span style="color:#f1fa8c">&#39;Color Category&#39;</span>]<span style="color:#ff79c6">.</span>isin([<span style="color:#ff79c6">*</span>colors, <span style="color:#ff79c6">*</span>colors_abv])]<span style="color:#ff79c6">.</span>values<span style="color:#ff79c6">.</span>tolist()
 </code></pre></div><p>The last line takes cards that don&rsquo;t fall into the five colors and creates an &ldquo;Other&rdquo; group.</p>
 <p>I heavily used a python shell to troubleshoot each step along the way. For example, at this point I was able to confirm that the data looked like I expected it to by poking around the dictionary:</p>
 <p><img loading="lazy" src="/images/2023-10-06_01.png#center" alt="screenshot"  />
 </p>
 <p>The next step of shuffling the cards in each color group was quite simple, after adding <code>import random</code> I added:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># shuffle</span>
-<span style="color:#66d9ef">for</span> color <span style="color:#f92672">in</span> cards:
-    random<span style="color:#f92672">.</span>shuffle(cards[color])
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#6272a4"># shuffle</span>
+<span style="color:#ff79c6">for</span> color <span style="color:#ff79c6">in</span> cards:
+    random<span style="color:#ff79c6">.</span>shuffle(cards[color])
 </code></pre></div><p>The rest wasn&rsquo;t so simple, and took the majority of a day.</p>
 <h2 id="building-the-packs">Building the &ldquo;packs&rdquo;<a hidden class="anchor" aria-hidden="true" href="#building-the-packs">#</a></h2>
 <p>I wanted to deal two cards of each color to each of 24 packs, then add any leftovers to the &ldquo;Other&rdquo; group of cards, and shuffle and deal that to the 24 packs. After a lot of effort, I ended up creating a new list for the &ldquo;boosters&rdquo; (packs), added the cards using three nested loops, and kept track of the last card so that I could add the remaining colored cards to the &ldquo;Other&rdquo; group. Here&rsquo;s what all of that eventually looked like:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">num_boosters <span style="color:#f92672">=</span> <span style="color:#ae81ff">24</span>
-num_cards <span style="color:#f92672">=</span> <span style="color:#ae81ff">15</span>
-num_each_color <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">num_boosters <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">24</span>
+num_cards <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">15</span>
+num_each_color <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">2</span>
 
-last <span style="color:#f92672">=</span> {}
-boosters <span style="color:#f92672">=</span> []
+last <span style="color:#ff79c6">=</span> {}
+boosters <span style="color:#ff79c6">=</span> []
 
-<span style="color:#75715e"># add colored cards to boosters</span>
-<span style="color:#66d9ef">for</span> booster <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, num_boosters):
-    boosters<span style="color:#f92672">.</span>append([])
-    <span style="color:#66d9ef">for</span> color <span style="color:#f92672">in</span> colors:
-        <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, num_each_color):
-            position <span style="color:#f92672">=</span> i <span style="color:#f92672">+</span> booster <span style="color:#f92672">*</span> num_each_color
-            <span style="color:#66d9ef">if</span> (position <span style="color:#f92672">&lt;</span> len(cards[color])):
-                boosters[booster]<span style="color:#f92672">.</span>append(cards[color][position])
-                last[color] <span style="color:#f92672">=</span> position
+<span style="color:#6272a4"># add colored cards to boosters</span>
+<span style="color:#ff79c6">for</span> booster <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#bd93f9">0</span>, num_boosters):
+    boosters<span style="color:#ff79c6">.</span>append([])
+    <span style="color:#ff79c6">for</span> color <span style="color:#ff79c6">in</span> colors:
+        <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#bd93f9">0</span>, num_each_color):
+            position <span style="color:#ff79c6">=</span> i <span style="color:#ff79c6">+</span> booster <span style="color:#ff79c6">*</span> num_each_color
+            <span style="color:#ff79c6">if</span> (position <span style="color:#ff79c6">&lt;</span> <span style="color:#8be9fd;font-style:italic">len</span>(cards[color])):
+                boosters[booster]<span style="color:#ff79c6">.</span>append(cards[color][position])
+                last[color] <span style="color:#ff79c6">=</span> position
 
-<span style="color:#75715e"># add rest of colored cards to other</span>
-<span style="color:#66d9ef">for</span> color <span style="color:#f92672">in</span> colors:
-    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(last[color]<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>, len(cards[color])):
-        cards[<span style="color:#e6db74">&#34;Other&#34;</span>]<span style="color:#f92672">.</span>append(cards[color][i])
-random<span style="color:#f92672">.</span>shuffle(cards[<span style="color:#e6db74">&#34;Other&#34;</span>])
+<span style="color:#6272a4"># add rest of colored cards to other</span>
+<span style="color:#ff79c6">for</span> color <span style="color:#ff79c6">in</span> colors:
+    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(last[color]<span style="color:#ff79c6">+</span><span style="color:#bd93f9">1</span>, <span style="color:#8be9fd;font-style:italic">len</span>(cards[color])):
+        cards[<span style="color:#f1fa8c">&#34;Other&#34;</span>]<span style="color:#ff79c6">.</span>append(cards[color][i])
+random<span style="color:#ff79c6">.</span>shuffle(cards[<span style="color:#f1fa8c">&#34;Other&#34;</span>])
 
-<span style="color:#75715e"># add the rest to boosters</span>
-position <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-<span style="color:#66d9ef">for</span> booster <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, len(boosters)):
-    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, num_cards <span style="color:#f92672">-</span> len(boosters[booster])):
-        boosters[booster]<span style="color:#f92672">.</span>append(cards[<span style="color:#e6db74">&#34;Other&#34;</span>][position])
-        position <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+<span style="color:#6272a4"># add the rest to boosters</span>
+position <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>
+<span style="color:#ff79c6">for</span> booster <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#bd93f9">0</span>, <span style="color:#8be9fd;font-style:italic">len</span>(boosters)):
+    <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">in</span> <span style="color:#8be9fd;font-style:italic">range</span>(<span style="color:#bd93f9">0</span>, num_cards <span style="color:#ff79c6">-</span> <span style="color:#8be9fd;font-style:italic">len</span>(boosters[booster])):
+        boosters[booster]<span style="color:#ff79c6">.</span>append(cards[<span style="color:#f1fa8c">&#34;Other&#34;</span>][position])
+        position <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>
 
 
 </code></pre></div><p>This is usually when I think &ldquo;there must be a more elegant way to do this&rdquo;, but try not to get lost in the rabbit hole of searching for that. Learning comes incrementally - it&rsquo;s important to take small bites.</p>
 <h2 id="putting-it-all-together">Putting it All Together<a hidden class="anchor" aria-hidden="true" href="#putting-it-all-together">#</a></h2>
 <p>Now that I had my boosters, I just needed to output them. I was initially going to write them to a file in the script, but decided that outputting using <code>print()</code> might make more sense. This seemed the same as the typically preferred method in Powershell (write-output).  The idea being that it gives greater control at runtime. Either way, here&rsquo;s what that looked like:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">for</span> booster <span style="color:#f92672">in</span> boosters:
-    <span style="color:#66d9ef">for</span> card <span style="color:#f92672">in</span> booster:
-        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>card[<span style="color:#ae81ff">0</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74"> (</span><span style="color:#e6db74">{</span>card[<span style="color:#ae81ff">4</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">) </span><span style="color:#e6db74">{</span>card[<span style="color:#ae81ff">5</span>]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
-    print(<span style="color:#e6db74">&#34;&#34;</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">for</span> booster <span style="color:#ff79c6">in</span> boosters:
+    <span style="color:#ff79c6">for</span> card <span style="color:#ff79c6">in</span> booster:
+        <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">{</span>card[<span style="color:#bd93f9">0</span>]<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c"> (</span><span style="color:#f1fa8c">{</span>card[<span style="color:#bd93f9">4</span>]<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">) </span><span style="color:#f1fa8c">{</span>card[<span style="color:#bd93f9">5</span>]<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>)
+    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;&#34;</span>)
 </code></pre></div><p>Then I was able to create a new text file of boosters by running</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">python3 make-boosters.py &gt; boosters.txt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">python3 make-boosters.py &gt; boosters.txt
 </code></pre></div><h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
 <p>It was a joy, if a struggle, to dig into a language I&rsquo;ve been wanting to learn more of. I feel grateful that I had a problem to solve where Python was a good solution. I look forward to using it more in the future.</p>
 <p>You can find the entire script on my <a href="https://gist.github.com/rickthackeray/public">Github Gists</a>.</p>
@@ -327,7 +327,7 @@ Rick</p>
     </main>
     
 <footer class="footer">
-    <span>&copy; 2023 <a href="https://rickt.io/">Learning with Rick</a></span>
+    <span>&copy; 2024 <a href="https://rickt.io/">Learning with Rick</a></span>
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
