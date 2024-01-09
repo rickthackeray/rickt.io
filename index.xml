@@ -6,7 +6,17 @@
     <description>Recent content on Learning with Rick</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 17 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using Terraform for ECS/EC2</title>
+      <link>https://rickt.io/posts/10-terraform/</link>
+      <pubDate>Sun, 17 Dec 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://rickt.io/posts/10-terraform/</guid>
+      <description>Introduction Today I&amp;rsquo;d like to share my experience of learning the basics of Terraform. I will show how I used it to set up AWS infrastructure to run the FastAPI backend of my notes app. Namely, I will be setting up an ECS cluster with one EC2 provider. I will also share some of the struggles I had to overcome - at least the ones I haven&amp;rsquo;t suppressed.
+Setup First, I installed Terraform using the [official guide from Hashicorp], using the following commands for my Linux machine:</description>
+    </item>
+    
     <item>
       <title>Load Balancing Using Nginx and Docker</title>
       <link>https://rickt.io/posts/09-load-balancing-a-fastapi-app-with-nginx-and-docker/</link>
