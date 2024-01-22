@@ -14,7 +14,7 @@
       
       <guid>https://rickt.io/posts/10-terraform/</guid>
       <description>Introduction Today I&amp;rsquo;d like to share my experience of learning the basics of Terraform. I will show how I used it to set up AWS infrastructure to run the FastAPI backend of my notes app. Namely, I will be setting up an ECS cluster with one EC2 provider. I will also share some of the struggles I had to overcome - at least the ones I haven&amp;rsquo;t suppressed.
-Setup First, I installed Terraform using the official guide from Hashicorp, using the following commands for my Linux machine:</description>
+This post is a part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.</description>
     </item>
     
     <item>
@@ -103,6 +103,25 @@ I had set up a simple website on S3 using the graphical interface before, so thi
       <guid>https://rickt.io/posts/01-docker-for-home-services/</guid>
       <description>Introduction Up to this point, I hadn&amp;rsquo;t used Docker very much. The organizations I worked at were traditional Windows environments with no in-house development. I could see the value in containers generally, but it was hard to justify and especially to convince others it was worth using in those environments.
 I&amp;rsquo;ve long hosted various services for myself at home. In the past these were ran on separate Windows VMs so that I could better learn the skills needed for the work I was doing.</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://rickt.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rickt.io/about/</guid>
+      <description>Introduction Hello! My name is Rick Thackeray and I like learning. This is my place on the internet to share some of the things that I learn.
+I recently left my position as a traditional System Administrator to persue the path of DevOps Engineering. My posts generally reflect the work I&amp;rsquo;ve put in to aquiring the skills I need to bridge the gap between those positions. If you&amp;rsquo;re interested in hiring me, you can find my resume here</description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>https://rickt.io/projects/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rickt.io/projects/</guid>
+      <description>Projects </description>
     </item>
     
   </channel>

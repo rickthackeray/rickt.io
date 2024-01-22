@@ -14,7 +14,7 @@
       
       <guid>https://rickt.io/posts/10-terraform/</guid>
       <description>Introduction Today I&amp;rsquo;d like to share my experience of learning the basics of Terraform. I will show how I used it to set up AWS infrastructure to run the FastAPI backend of my notes app. Namely, I will be setting up an ECS cluster with one EC2 provider. I will also share some of the struggles I had to overcome - at least the ones I haven&amp;rsquo;t suppressed.
-Setup First, I installed Terraform using the official guide from Hashicorp, using the following commands for my Linux machine:</description>
+This post is a part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.</description>
     </item>
     
     <item>
