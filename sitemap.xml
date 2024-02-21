@@ -8,7 +8,7 @@
     <loc>https://rickt.io/posts/</loc>
     <lastmod>2023-12-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://rickt.io/posts/10-terraform/</loc>
+    <loc>https://rickt.io/posts/10-terraform-for-ecs/</loc>
     <lastmod>2023-12-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://rickt.io/posts/09-load-balancing-a-fastapi-app-with-nginx-and-docker/</loc>
@@ -41,8 +41,6 @@
     <loc>https://rickt.io/about/</loc>
   </url><url>
     <loc>https://rickt.io/categories/</loc>
-  </url><url>
-    <loc>https://rickt.io/projects/</loc>
   </url><url>
     <loc>https://rickt.io/tags/</loc>
   </url>
