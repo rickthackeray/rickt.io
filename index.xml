@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Learning with Rick</title>
+    <title>Learning DevOps with Rick</title>
     <link>https://rickt.io/</link>
-    <description>Recent content on Learning with Rick</description>
+    <description>Recent content on Learning DevOps with Rick</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 17 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/index.xml" rel="self" type="application/rss+xml" />
@@ -14,7 +14,7 @@
       
       <guid>https://rickt.io/posts/10-terraform-for-ecs/</guid>
       <description>Introduction Today I&amp;rsquo;d like to share my experience of learning the basics of Terraform. I will show how I used it to set up AWS infrastructure to run the FastAPI backend of my notes app. Namely, I will be setting up an ECS cluster with one EC2 provider. I will also share some of the struggles I had to overcome - at least the ones I haven&amp;rsquo;t suppressed.
-This post is a part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.</description>
+This post is part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.</description>
     </item>
     
     <item>
@@ -43,7 +43,7 @@ Setup To get started, I made a new git branch of my project&amp;rsquo;s repo. Th
       
       <guid>https://rickt.io/posts/07-deploying-fastapi-to-aws-ecs/</guid>
       <description>Introduction In my latest efforts to learn more about DevOps tools and practices, I set out to deploy the Docker image for my FastAPI app API to AWS. You can read about the process of building the image in my last post.
-This post is a part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.</description>
+This post is part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.</description>
     </item>
     
     <item>
@@ -53,7 +53,7 @@ This post is a part of a series where I create a basic CRUD app and improve upon
       
       <guid>https://rickt.io/posts/06-containerize-a-fastapi-app-with-docker/</guid>
       <description>Introduction In my ongoing effort to learn the tools and practices for DevOps engineering, today I wanted to containerize the FastAPI backend of the notes app that I created previously, using Docker.
-This post is a part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.
+This post is part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.
    Title     Creating a Notes App with FARM Stack   Containerize a FastAPI App with Docker   Deploying a FastAPI Container to AWS ECS   Setting Up GitHub Actions to Deploy to ECS   Using Terraform for ECS/EC2    Getting Started I started off by creating a Dockerfile.</description>
     </item>
     

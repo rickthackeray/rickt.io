@@ -5,10 +5,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>Deploying a FastAPI Container to AWS ECS | Learning with Rick</title>
+<title>Deploying a FastAPI Container to AWS ECS | Learning DevOps with Rick</title>
 <meta name="keywords" content="">
 <meta name="description" content="Introduction In my latest efforts to learn more about DevOps tools and practices, I set out to deploy the Docker image for my FastAPI app API to AWS. You can read about the process of building the image in my last post.
-This post is a part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.">
+This post is part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.">
 <meta name="author" content="">
 <link rel="canonical" href="https://rickt.io/posts/07-deploying-fastapi-to-aws-ecs/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.c298361a052d70fd4ce0d87fac47d88fb063528ceab06c67a460167c3d399bdc.css" integrity="sha256-wpg2GgUtcP1M4Nh/rEfYj7BjUozqsGxnpGAWfD05m9w=" rel="preload stylesheet" as="style">
@@ -68,7 +68,7 @@ This post is a part of a series where I create a basic CRUD app and improve upon
 </script>
 <meta property="og:title" content="Deploying a FastAPI Container to AWS ECS" />
 <meta property="og:description" content="Introduction In my latest efforts to learn more about DevOps tools and practices, I set out to deploy the Docker image for my FastAPI app API to AWS. You can read about the process of building the image in my last post.
-This post is a part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques." />
+This post is part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rickt.io/posts/07-deploying-fastapi-to-aws-ecs/" />
 <meta property="og:image" content="https://rickt.io/images/ecs.svg" /><meta property="article:section" content="posts" />
@@ -79,7 +79,7 @@ This post is a part of a series where I create a basic CRUD app and improve upon
 <meta name="twitter:image" content="https://rickt.io/images/ecs.svg" />
 <meta name="twitter:title" content="Deploying a FastAPI Container to AWS ECS"/>
 <meta name="twitter:description" content="Introduction In my latest efforts to learn more about DevOps tools and practices, I set out to deploy the Docker image for my FastAPI app API to AWS. You can read about the process of building the image in my last post.
-This post is a part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques."/>
+This post is part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques."/>
 
 
 <script type="application/ld+json">
@@ -108,12 +108,12 @@ This post is a part of a series where I create a basic CRUD app and improve upon
   "@type": "BlogPosting",
   "headline": "Deploying a FastAPI Container to AWS ECS",
   "name": "Deploying a FastAPI Container to AWS ECS",
-  "description": "Introduction In my latest efforts to learn more about DevOps tools and practices, I set out to deploy the Docker image for my FastAPI app API to AWS. You can read about the process of building the image in my last post.\nThis post is a part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.",
+  "description": "Introduction In my latest efforts to learn more about DevOps tools and practices, I set out to deploy the Docker image for my FastAPI app API to AWS. You can read about the process of building the image in my last post.\nThis post is part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.",
   "keywords": [
     
   ],
-  "articleBody": "Introduction In my latest efforts to learn more about DevOps tools and practices, I set out to deploy the Docker image for my FastAPI app API to AWS. You can read about the process of building the image in my last post.\nThis post is a part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.\n   Title     Creating a Notes App with FARM Stack   Containerize a FastAPI App with Docker   Deploying a FastAPI Container to AWS ECS   Setting Up GitHub Actions to Deploy to ECS   Using Terraform for ECS/EC2    Initially, I was overwhelmed by the many ways to run containers on AWS. I mistakenly decided to try Lambda - partially to use the most “serverless” method I could, but mostly to be as cheap as possible. Many painful hours of not getting it to work later, and I decided to try out ECS instead. Either way, first I needed to push my Docker image to AWS ECR.\nECR Setup I was able to do this part using the AWS CLI. First I created a new ECR repository:\naws ecr create-repository --repository-name notes-api Next, AWS gave instructions on how to authenticate the local Docker utility to my AWS:\naws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin .dkr.ecr.us-west-2.amazonaws.com I was able to get my AWS id using this command:\naws sts get-caller-identity Then, AWS required a specific taging convention:\ndocker tag notes-api:latest .dkr.ecr.us-west-2.amazonaws.com/notes-api:latest Finally, I was able to push the image to ECR using:\ndocker push .dkr.ecr.us-west-2.amazonaws.com/notes-api:latest I verified that my image showed up in the web console and copied the image URI, so it was time to spin up an ECS cluster.\nECS Setup I wasn’t finding any real resources for setting up ECS using the CLI, so I did this part using the web console. I hate having to rely on a graphical interface, so I plan on learning some form of IaC for this in the future.\nFirst, I went to the old web interface because it matched the guides I was using. Then I went to Create Cluster and selected EC2 Linux + Networking.\nI then changed the following fields:\n Cluster Name: notes-api EC2 instance type: t3.nano Key pair: an existing key pair - this isn’t necessary, but I wanted to have it so that I could connect to the ec2 instance if I needed to troubleshoot, which I ended up needing. VPC: I chose one I had setup previously Security group: I chose one I had setup previously Auto assign public IP: Enabled  After hitting create, I went to Task Definitions then Create new Task Definition and selected EC2.\nFor this section I entered the following:\n Task definition name: notes-api-task Task Memory: 100 Task CPU: 1024  And under Container definitions, I clicked Add container, gave it a name, pasted my container URI from the ECR page, and set a port mapping of 80 to 8000 to match the Uvicorn service that runs in the container. I left the rest as defaults and clicked Add.\nBack at the Create Cluster page, I left the rest as default and clicked Create.\nThen, I went back to the Clusters page, selected my “notes-api” cluster, selected the Tasks tab, and clicked Run new Task. On the next screen, I selected EC2 and clicked Run Task\nAt this point, I went to the EC2 console and found the public IP for my new EC2 instance. With that, I was able to verify that the root GET method, which was a simple string return, was working. The other routes, which used an external API call to Mongo Atlas, were not.\nI was able to get into the EC2 instance and read the output from the Docker container, which described a failed connection to the Mongo API. At first I thought it must be the Security Group firewall blocking it on AWS, so I first tried opening the port it needed (27017), and opening the whole thing when that didn’t work. Eventually I logged into my Atlas console and realized that there was an IP allow list on that end. Once I added the EC2 instance’s IP, everything worked! Of course I removed the allow all rule from the Security Group, leaving the 27017 port open.\nAdding the Front-End Now that the API was fully functioning, I just needed to put up my front-end. This was quite easy as I had done this before and wrote down how to host it on S3 using the CLI in a previous post.\nOnce the front-end was up and a few minutes after adding the DNS record, I had my app fully running at http://notes.rickt.io/\nConclusion This one took a lot of effort to get through. I had been struggling to focus and spend my time productively working on this ongoing project. One thing that has helped a lot is picking up a used ThinkPad and working outside of my home at coffee shops. Not only has it given me the ability to stay on task, but it has forced me to become even more familiar with Git when I switch from one workstation to the other.\n%% I’m also immensely grateful to my partner, Jen Hernandez for all her support in this endeavor. %%\nCheers!\nRick\n   Resources  Github repo for this app - https://github.com/rickthackeray/notes \\ AWS cloud demos' ECS guide - https://www.youtube.com/watch?v=PgyFrkJaNys \\  ",
-  "wordCount" : "909",
+  "articleBody": "Introduction In my latest efforts to learn more about DevOps tools and practices, I set out to deploy the Docker image for my FastAPI app API to AWS. You can read about the process of building the image in my last post.\nThis post is part of a series where I create a basic CRUD app and improve upon the development and deployment of the app using DevOps tools and techniques.\n   Title     Creating a Notes App with FARM Stack   Containerize a FastAPI App with Docker   Deploying a FastAPI Container to AWS ECS   Setting Up GitHub Actions to Deploy to ECS   Using Terraform for ECS/EC2    Initially, I was overwhelmed by the many ways to run containers on AWS. I mistakenly decided to try Lambda - partially to use the most “serverless” method I could, but mostly to be as cheap as possible. Many painful hours of not getting it to work later, and I decided to try out ECS instead. Either way, first I needed to push my Docker image to AWS ECR.\nECR Setup I was able to do this part using the AWS CLI. First I created a new ECR repository:\naws ecr create-repository --repository-name notes-api Next, AWS gave instructions on how to authenticate the local Docker utility to my AWS:\naws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin .dkr.ecr.us-west-2.amazonaws.com I was able to get my AWS id using this command:\naws sts get-caller-identity Then, AWS required a specific taging convention:\ndocker tag notes-api:latest .dkr.ecr.us-west-2.amazonaws.com/notes-api:latest Finally, I was able to push the image to ECR using:\ndocker push .dkr.ecr.us-west-2.amazonaws.com/notes-api:latest I verified that my image showed up in the web console and copied the image URI, so it was time to spin up an ECS cluster.\nECS Setup I wasn’t finding any real resources for setting up ECS using the CLI, so I did this part using the web console. I hate having to rely on a graphical interface, so I plan on learning some form of IaC for this in the future.\nFirst, I went to the old web interface because it matched the guides I was using. Then I went to Create Cluster and selected EC2 Linux + Networking.\nI then changed the following fields:\n Cluster Name: notes-api EC2 instance type: t3.nano Key pair: an existing key pair - this isn’t necessary, but I wanted to have it so that I could connect to the ec2 instance if I needed to troubleshoot, which I ended up needing. VPC: I chose one I had setup previously Security group: I chose one I had setup previously Auto assign public IP: Enabled  After hitting create, I went to Task Definitions then Create new Task Definition and selected EC2.\nFor this section I entered the following:\n Task definition name: notes-api-task Task Memory: 100 Task CPU: 1024  And under Container definitions, I clicked Add container, gave it a name, pasted my container URI from the ECR page, and set a port mapping of 80 to 8000 to match the Uvicorn service that runs in the container. I left the rest as defaults and clicked Add.\nBack at the Create Cluster page, I left the rest as default and clicked Create.\nThen, I went back to the Clusters page, selected my “notes-api” cluster, selected the Tasks tab, and clicked Run new Task. On the next screen, I selected EC2 and clicked Run Task\nAt this point, I went to the EC2 console and found the public IP for my new EC2 instance. With that, I was able to verify that the root GET method, which was a simple string return, was working. The other routes, which used an external API call to Mongo Atlas, were not.\nI was able to get into the EC2 instance and read the output from the Docker container, which described a failed connection to the Mongo API. At first I thought it must be the Security Group firewall blocking it on AWS, so I first tried opening the port it needed (27017), and opening the whole thing when that didn’t work. Eventually I logged into my Atlas console and realized that there was an IP allow list on that end. Once I added the EC2 instance’s IP, everything worked! Of course I removed the allow all rule from the Security Group, leaving the 27017 port open.\nAdding the Front-End Now that the API was fully functioning, I just needed to put up my front-end. This was quite easy as I had done this before and wrote down how to host it on S3 using the CLI in a previous post.\nOnce the front-end was up and a few minutes after adding the DNS record, I had my app fully running at http://notes.rickt.io/\nConclusion This one took a lot of effort to get through. I had been struggling to focus and spend my time productively working on this ongoing project. One thing that has helped a lot is picking up a used ThinkPad and working outside of my home at coffee shops. Not only has it given me the ability to stay on task, but it has forced me to become even more familiar with Git when I switch from one workstation to the other.\n%% I’m also immensely grateful to my partner, Jen Hernandez for all her support in this endeavor. %%\nCheers!\nRick\n   Resources  Github repo for this app - https://github.com/rickthackeray/notes \\ AWS cloud demos' ECS guide - https://www.youtube.com/watch?v=PgyFrkJaNys \\  ",
+  "wordCount" : "908",
   "inLanguage": "en",
   "image":"https://rickt.io/images/ecs.svg","datePublished": "2023-11-07T00:00:00Z",
   "dateModified": "2023-11-07T00:00:00Z",
@@ -123,7 +123,7 @@ This post is a part of a series where I create a basic CRUD app and improve upon
   },
   "publisher": {
     "@type": "Organization",
-    "name": "Learning with Rick",
+    "name": "Learning DevOps with Rick",
     "logo": {
       "@type": "ImageObject",
       "url": "https://rickt.io/favicon.ico"
@@ -148,7 +148,7 @@ This post is a part of a series where I create a basic CRUD app and improve upon
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://rickt.io/" accesskey="h" title="Learning with Rick (Alt + H)">Learning with Rick</a>
+            <a href="https://rickt.io/" accesskey="h" title="Learning DevOps with Rick (Alt + H)">Learning DevOps with Rick</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -179,7 +179,7 @@ This post is a part of a series where I create a basic CRUD app and improve upon
                 </a>
             </li>
             <li>
-                <a href="https://rickt.io/" title="Learning with Rick">
+                <a href="https://rickt.io/" title="Learning DevOps with Rick">
                     <span>Posts</span>
                 </a>
             </li>
@@ -203,7 +203,7 @@ This post is a part of a series where I create a basic CRUD app and improve upon
 </figure>
   <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
 <p>In my latest efforts to learn more about DevOps tools and practices, I set out to deploy the Docker image for my FastAPI app API to AWS. You can read about the process of building the image <a href="https://rickt.io/posts/06-containerize-a-fastapi-app-with-docker/">in my last post</a>.</p>
-<p>This post is a part of a series where I create a basic <a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD app</a> and improve upon the development and deployment of the app using DevOps tools and techniques.</p>
+<p>This post is part of a series where I create a basic <a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD app</a> and improve upon the development and deployment of the app using DevOps tools and techniques.</p>
 <table>
 <thead>
 <tr>
@@ -313,7 +313,7 @@ Rick</p>
     </main>
     
 <footer class="footer">
-    <span>&copy; 2024 <a href="https://rickt.io/">Learning with Rick</a></span>
+    <span>&copy; 2024 <a href="https://rickt.io/">Learning DevOps with Rick</a></span>
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
