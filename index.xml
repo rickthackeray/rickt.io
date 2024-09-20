@@ -107,6 +107,17 @@ I&amp;rsquo;ve long hosted various services for myself at home. In the past thes
     </item>
     
     <item>
+      <title></title>
+      <link>https://rickt.io/posts/b1-adding-ssl-tls-to-s3-website/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rickt.io/posts/b1-adding-ssl-tls-to-s3-website/</guid>
+      <description>Introduction Conclusion Cheers!
+Rick
+   Resources  Title Here (org here) - http://link.here \   title: Adding SSL(TLS) to S3 static page date: 2023-12-02 draft: true isblog: true cover: image: /images/FILENAME.svg Introduction  create S3 bucket  don&amp;rsquo;t block public acccess create allow policy for bucket   new hosted zone in Route 53 for notesapp.rickt.io  added NS records to Namecheap for subdomain   created public cert in Cert Manager CloudFront  redirect http to https alternative domain name must match route53   mixed content: would need to add letsencrypt to fastapi (uvicorn)  Conclusion Cheers!</description>
+    </item>
+    
+    <item>
       <title>About</title>
       <link>https://rickt.io/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
