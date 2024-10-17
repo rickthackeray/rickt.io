@@ -6,7 +6,16 @@
     <description>Recent content on Learning DevOps with Rick</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 17 Dec 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 17 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using Ansible to Configure a New Workstation</title>
+      <link>https://rickt.io/posts/11-using-ansible-to-configure-a-new-workstation/</link>
+      <pubDate>Thu, 17 Oct 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://rickt.io/posts/11-using-ansible-to-configure-a-new-workstation/</guid>
+      <description>Introduction I&amp;rsquo;d been wanting to check out Ansible for a while. When I learn a new technology I prefer to have a real use for it. Up to this point I hadn&amp;rsquo;t found one for Ansible, until I decided to switch my daily driver from Ubuntu to Debian. I realized that I could probably codify all of the software installs and configuration using Ansible, so that the next time I rebuild my workstation it would be automated.</description>
+    </item>
+    
     <item>
       <title>Using Terraform for ECS/EC2</title>
       <link>https://rickt.io/posts/10-terraform-for-ecs/</link>

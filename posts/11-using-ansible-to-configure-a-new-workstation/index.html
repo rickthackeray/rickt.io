@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Using Ansible to Configure a New Workstation | Learning DevOps with Rick</title>
+<meta name="keywords" content="">
+<meta name="description" content="Introduction I&rsquo;d been wanting to check out Ansible for a while. When I learn a new technology I prefer to have a real use for it. Up to this point I hadn&rsquo;t found one for Ansible, until I decided to switch my daily driver from Ubuntu to Debian. I realized that I could probably codify all of the software installs and configuration using Ansible, so that the next time I rebuild my workstation it would be automated.">
+<meta name="author" content="">
+<link rel="canonical" href="https://rickt.io/posts/11-using-ansible-to-configure-a-new-workstation/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.c298361a052d70fd4ce0d87fac47d88fb063528ceab06c67a460167c3d399bdc.css" integrity="sha256-wpg2GgUtcP1M4Nh/rEfYj7BjUozqsGxnpGAWfD05m9w=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://rickt.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://rickt.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://rickt.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://rickt.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://rickt.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YDQ7YKECFZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YDQ7YKECFZ');
+</script>
+<meta property="og:title" content="Using Ansible to Configure a New Workstation" />
+<meta property="og:description" content="Introduction I&rsquo;d been wanting to check out Ansible for a while. When I learn a new technology I prefer to have a real use for it. Up to this point I hadn&rsquo;t found one for Ansible, until I decided to switch my daily driver from Ubuntu to Debian. I realized that I could probably codify all of the software installs and configuration using Ansible, so that the next time I rebuild my workstation it would be automated." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rickt.io/posts/11-using-ansible-to-configure-a-new-workstation/" />
+<meta property="og:image" content="https://rickt.io/images/ansible.svg" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-10-17T00:00:00+00:00" />
+<meta property="article:modified_time" content="2024-10-17T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://rickt.io/images/ansible.svg" />
+<meta name="twitter:title" content="Using Ansible to Configure a New Workstation"/>
+<meta name="twitter:description" content="Introduction I&rsquo;d been wanting to check out Ansible for a while. When I learn a new technology I prefer to have a real use for it. Up to this point I hadn&rsquo;t found one for Ansible, until I decided to switch my daily driver from Ubuntu to Debian. I realized that I could probably codify all of the software installs and configuration using Ansible, so that the next time I rebuild my workstation it would be automated."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://rickt.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Using Ansible to Configure a New Workstation",
+      "item": "https://rickt.io/posts/11-using-ansible-to-configure-a-new-workstation/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Using Ansible to Configure a New Workstation",
+  "name": "Using Ansible to Configure a New Workstation",
+  "description": "Introduction I\u0026rsquo;d been wanting to check out Ansible for a while. When I learn a new technology I prefer to have a real use for it. Up to this point I hadn\u0026rsquo;t found one for Ansible, until I decided to switch my daily driver from Ubuntu to Debian. I realized that I could probably codify all of the software installs and configuration using Ansible, so that the next time I rebuild my workstation it would be automated.",
+  "keywords": [
+    
+  ],
+  "articleBody": "Introduction I’d been wanting to check out Ansible for a while. When I learn a new technology I prefer to have a real use for it. Up to this point I hadn’t found one for Ansible, until I decided to switch my daily driver from Ubuntu to Debian. I realized that I could probably codify all of the software installs and configuration using Ansible, so that the next time I rebuild my workstation it would be automated. I’d like to share what I’ve come up with.\nSetup After installing Debian on my workstation, I updated the apt cache and installed the required dependency - which was unecessary as it was already in the Debian build I used:\nsudo apt update sudo apt install software-properties-common Then I added the official Ansible repo:\nsudo add-apt-repository --update ppa:ansible/ansible And installed Ansible:\nsudo apt install ansible Making a Playbook I started with installing some basic command line utils found in the default apt repos by making a playbook file called software.yml:\n--- - hosts: localhost connection: local become: true tasks: - name: Install apt packages ansible.builtin.apt: state: present update_cache: true name: - htop - tree - neofetch To apply this playbook, I ran sudo ansible-playbook software.yml. After the success message, I was able to verify it worked by running one of the utilities, like neofetch.\nThis was great, but I realized some of the software I needed (vscode, firefox, github cli) would require adding their official repos. It took a lot of searching and cross referencing Ansible documentation with installation documentation from the respective software sites. Eventually, I came up with this:\n- name: Add Mozilla gpg key ansible.builtin.apt_key: url: https://packages.mozilla.org/apt/repo-signing-key.gpg state: present - name: Add Mozilla repository apt_repository: repo: deb [arch=amd64] https://packages.mozilla.org/apt mozilla main - name: Add VSCode gpg key ansible.builtin.apt_key: url: https://packages.microsoft.com/keys/microsoft.asc state: present - name: Add VSCode repository apt_repository: repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main - name: Add Github gpg key ansible.builtin.apt_key: url: https://cli.github.com/packages/githubcli-archive-keyring.gpg state: present - name: Add Github repository apt_repository: repo: deb [arch=amd64] https://cli.github.com/packages stable main Now I could add the corresponding packages to the apt install section:\n- name: Install apt packages ansible.builtin.apt: state: present update_cache: true name: - htop - tree - neofetch - code - firefox - gh Awesome! Except there was one app I use a lot, Obsidian, that didn’t have an official apt repo and instead published releases to GitHub. I found that I could install the latest release using the following:\n- name: Install Obsidian ansible.builtin.apt: deb: \"https://github.com/obsidianmd/obsidian-releases/releases/download/v1.5.12/obsidian_1.5.12_amd64.deb\" This worked, but I realized this would quickly not be the latest version and wouldn’t have any way to update it. So, I went down a rabbit hole of trying to program Ansible to pull the latest release info from GitHub and then install it. In the end I came up with this:\n- name: Get Obsidian Releases ansible.builtin.uri: url: https://api.github.com/repos/obsidianmd/obsidian-releases/releases/latest return_content: true register: json_response - name: Install Obsidian ansible.builtin.apt: deb: \"{{ item.browser_download_url }}\" loop_control: label: \"{{ item.browser_download_url }}\" loop: \"{{ json_response.json.assets }}\" when: item.browser_download_url is search(\"amd64.deb\") register: download_url And it worked! It essentially curl’s the GitHub API for the latest release of the Obsidian official repo, parses the JSON to pick the url of the .deb package from a list of other package types, then downloads and installs the file from that url.\nShell Configuration At this point I had a lot of the software I wanted, but there were a number of shell configurations that I wanted to change like dark mode, screen timeout, and enabling title-bar buttons . My playbook was getting pretty big, so I made a new one called settings.yml.\nI found some of the settings I wanted to change by looking for them specifically. They all involved dconf key modification, so it was a big help when I found the following command:\ndconf watch / This puts the terminal in a monitoring mode, displaying the key and value as you change settings in graphical interfaces. So much better than digging through documentation or Stack Overflow!\nWith that, I found the keys and values to change and came up with this for my settings:\n--- - hosts: localhost connection: local tasks: - name: Screen timeout 30min dconf: key: /org/gnome/desktop/session/idle-delay value: \"uint32 1800\" - name: Prefer Dark dconf: key: /org/gnome/desktop/interface/color-scheme value: \"'prefer-dark'\" - name: Window Theme dconf: key: /org/gnome/desktop/interface/gtk-theme value: \"'Adwaita-dark'\" - name: Titlebar buttons dconf: key: /org/gnome/desktop/wm/preferences/button-layout value: \"'appmenu:minimize,maximize,close'\" Conclusion It was nice to get my feet wet with Ansible. That said, I wonder how much I’d use it in a professional setting. I think it would depend how much of the infrastructure is self hosted. It seems like it would at least be useful for the provisioning of developer workstations.\nI’ve left out some of the code for brevity. You can find the complete files at this github repo.\nCheers!\nRick\n   Resources  Ansible Official Documentation - https://docs.ansible.com/  ",
+  "wordCount" : "808",
+  "inLanguage": "en",
+  "image":"https://rickt.io/images/ansible.svg","datePublished": "2024-10-17T00:00:00Z",
+  "dateModified": "2024-10-17T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://rickt.io/posts/11-using-ansible-to-configure-a-new-workstation/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Learning DevOps with Rick",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://rickt.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://rickt.io/" accesskey="h" title="Learning DevOps with Rick (Alt + H)">Learning DevOps with Rick</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://rickt.io/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://rickt.io/" title="Learning DevOps with Rick">
+                    <span>Posts</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://rickt.io/">Home</a>&nbsp;»&nbsp;<a href="https://rickt.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Using Ansible to Configure a New Workstation
+    </h1>
+    <div class="post-meta"><span title='2024-10-17 00:00:00 +0000 UTC'>October 17, 2024</span>&nbsp;·&nbsp;4 min
+
+</div>
+  </header> 
+<figure class="entry-cover"><img loading="lazy" src="https://rickt.io/images/ansible.svg" alt="">
+        
+</figure>
+  <div class="post-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
+<p>I&rsquo;d been wanting to check out Ansible for a while. When I learn a new technology I prefer to have a real use for it. Up to this point I hadn&rsquo;t found one for Ansible, until I decided to switch my daily driver from Ubuntu to Debian. I realized that I could probably codify all of the software installs and configuration using Ansible, so that the next time I rebuild my workstation it would be automated. I&rsquo;d like to share what I&rsquo;ve come up with.</p>
+<h2 id="setup">Setup<a hidden class="anchor" aria-hidden="true" href="#setup">#</a></h2>
+<p>After installing Debian on my workstation, I updated the apt cache and installed the required dependency - which was unecessary as it was already in the Debian build I used:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo apt update
+sudo apt install software-properties-common
+</code></pre></div><p>Then I added the official Ansible repo:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo add-apt-repository --update ppa:ansible/ansible
+</code></pre></div><p>And installed Ansible:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sudo apt install ansible
+</code></pre></div><h2 id="making-a-playbook">Making a Playbook<a hidden class="anchor" aria-hidden="true" href="#making-a-playbook">#</a></h2>
+<p>I started with installing some basic command line utils found in the default apt repos by making a playbook file called <code>software.yml</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+- <span style="color:#ff79c6">hosts</span>: localhost
+  <span style="color:#ff79c6">connection</span>: local
+  <span style="color:#ff79c6">become</span>: <span style="color:#ff79c6">true</span>
+  <span style="color:#ff79c6">tasks</span>:
+
+  - <span style="color:#ff79c6">name</span>: Install apt packages
+    <span style="color:#ff79c6">ansible.builtin.apt</span>:
+      <span style="color:#ff79c6">state</span>: present
+      <span style="color:#ff79c6">update_cache</span>: <span style="color:#ff79c6">true</span>
+      <span style="color:#ff79c6">name</span>:
+      - htop
+      - tree
+      - neofetch
+
+</code></pre></div><p>To apply this playbook, I ran <code>sudo ansible-playbook software.yml</code>. After the success message, I was able to verify it worked by running one of the utilities, like <code>neofetch</code>.</p>
+<p>This was great, but I realized some of the software I needed (vscode, firefox, github cli) would require adding their official repos. It took a lot of searching and cross referencing Ansible documentation with installation documentation from the respective software sites. Eventually, I came up with this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"> - <span style="color:#ff79c6">name</span>: Add Mozilla gpg key
+    <span style="color:#ff79c6">ansible.builtin.apt_key</span>:
+      <span style="color:#ff79c6">url</span>: https://packages.mozilla.org/apt/repo-signing-key.gpg
+      <span style="color:#ff79c6">state</span>: present
+  - <span style="color:#ff79c6">name</span>: Add Mozilla repository
+    <span style="color:#ff79c6">apt_repository</span>:
+      <span style="color:#ff79c6">repo</span>: deb [arch=amd64] https://packages.mozilla.org/apt mozilla main
+
+  - <span style="color:#ff79c6">name</span>: Add VSCode gpg key
+    <span style="color:#ff79c6">ansible.builtin.apt_key</span>:
+      <span style="color:#ff79c6">url</span>: https://packages.microsoft.com/keys/microsoft.asc
+      <span style="color:#ff79c6">state</span>: present
+  - <span style="color:#ff79c6">name</span>: Add VSCode repository
+    <span style="color:#ff79c6">apt_repository</span>:
+      <span style="color:#ff79c6">repo</span>: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
+
+  - <span style="color:#ff79c6">name</span>: Add Github gpg key
+    <span style="color:#ff79c6">ansible.builtin.apt_key</span>:
+      <span style="color:#ff79c6">url</span>: https://cli.github.com/packages/githubcli-archive-keyring.gpg
+      <span style="color:#ff79c6">state</span>: present
+  - <span style="color:#ff79c6">name</span>: Add Github repository
+    <span style="color:#ff79c6">apt_repository</span>:
+      <span style="color:#ff79c6">repo</span>: deb [arch=amd64] https://cli.github.com/packages stable main
+</code></pre></div><p>Now I could add the corresponding packages to the apt install section:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">  - <span style="color:#ff79c6">name</span>: Install apt packages
+    <span style="color:#ff79c6">ansible.builtin.apt</span>:
+      <span style="color:#ff79c6">state</span>: present
+      <span style="color:#ff79c6">update_cache</span>: <span style="color:#ff79c6">true</span>
+      <span style="color:#ff79c6">name</span>:
+      - htop
+      - tree
+      - neofetch
+      - code
+      - firefox
+      - gh
+</code></pre></div><p>Awesome! Except there was one app I use a lot, Obsidian, that didn&rsquo;t have an official apt repo and instead published releases to GitHub. I found that I could install the latest release using the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"> - <span style="color:#ff79c6">name</span>: Install Obsidian
+    <span style="color:#ff79c6">ansible.builtin.apt</span>:
+      <span style="color:#ff79c6">deb</span>: <span style="color:#f1fa8c">&#34;https://github.com/obsidianmd/obsidian-releases/releases/download/v1.5.12/obsidian_1.5.12_amd64.deb&#34;</span>
+</code></pre></div><p>This worked, but I realized this would quickly not be the latest version and wouldn&rsquo;t have any way to update it. So, I went down a rabbit hole of trying to program Ansible to pull the latest release info from GitHub and then install it. In the end I came up with this:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">  - <span style="color:#ff79c6">name</span>: Get Obsidian Releases
+    <span style="color:#ff79c6">ansible.builtin.uri</span>:
+      <span style="color:#ff79c6">url</span>: https://api.github.com/repos/obsidianmd/obsidian-releases/releases/latest
+      <span style="color:#ff79c6">return_content</span>: <span style="color:#ff79c6">true</span>
+    <span style="color:#ff79c6">register</span>: json_response
+
+  - <span style="color:#ff79c6">name</span>: Install Obsidian
+    <span style="color:#ff79c6">ansible.builtin.apt</span>:
+      <span style="color:#ff79c6">deb</span>: <span style="color:#f1fa8c">&#34;{{ item.browser_download_url }}&#34;</span>
+    <span style="color:#ff79c6">loop_control</span>:
+      <span style="color:#ff79c6">label</span>: <span style="color:#f1fa8c">&#34;{{ item.browser_download_url }}&#34;</span>
+    <span style="color:#ff79c6">loop</span>: <span style="color:#f1fa8c">&#34;{{ json_response.json.assets }}&#34;</span>
+    <span style="color:#ff79c6">when</span>: item.browser_download_url is search(&#34;amd64.deb&#34;)
+    <span style="color:#ff79c6">register</span>: download_url
+</code></pre></div><p>And it worked! It essentially curl&rsquo;s the GitHub API for the latest release of the Obsidian official repo, parses the JSON to pick the url of the <code>.deb</code> package from a list of other package types, then downloads and installs the file from that url.</p>
+<h2 id="shell-configuration">Shell Configuration<a hidden class="anchor" aria-hidden="true" href="#shell-configuration">#</a></h2>
+<p>At this point I had a lot of the software I wanted, but there were a number of shell configurations that I wanted to change like dark mode, screen timeout, and enabling title-bar buttons . My playbook was getting pretty big, so I made a new one called <code>settings.yml</code>.</p>
+<p>I found some of the settings I wanted to change by looking for them specifically. They all involved dconf key modification, so it was a big help when I found the following command:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">dconf watch /
+</code></pre></div><p>This puts the terminal in a monitoring mode, displaying the key and value as you change settings in graphical interfaces. So much better than digging through documentation or Stack Overflow!</p>
+<p>With that, I found the keys and values to change and came up with this for my settings:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
+- <span style="color:#ff79c6">hosts</span>: localhost
+  <span style="color:#ff79c6">connection</span>: local
+  <span style="color:#ff79c6">tasks</span>:
+
+  - <span style="color:#ff79c6">name</span>: Screen timeout 30min
+    <span style="color:#ff79c6">dconf</span>:
+      <span style="color:#ff79c6">key</span>: /org/gnome/desktop/session/idle-delay
+      <span style="color:#ff79c6">value</span>: <span style="color:#f1fa8c">&#34;uint32 1800&#34;</span>
+
+  - <span style="color:#ff79c6">name</span>: Prefer Dark
+    <span style="color:#ff79c6">dconf</span>:
+      <span style="color:#ff79c6">key</span>: /org/gnome/desktop/interface/color-scheme
+      <span style="color:#ff79c6">value</span>: <span style="color:#f1fa8c">&#34;&#39;prefer-dark&#39;&#34;</span>
+
+  - <span style="color:#ff79c6">name</span>: Window Theme
+    <span style="color:#ff79c6">dconf</span>:
+      <span style="color:#ff79c6">key</span>: /org/gnome/desktop/interface/gtk-theme
+      <span style="color:#ff79c6">value</span>: <span style="color:#f1fa8c">&#34;&#39;Adwaita-dark&#39;&#34;</span>
+      
+  - <span style="color:#ff79c6">name</span>: Titlebar buttons
+    <span style="color:#ff79c6">dconf</span>:
+      <span style="color:#ff79c6">key</span>: /org/gnome/desktop/wm/preferences/button-layout
+      <span style="color:#ff79c6">value</span>: <span style="color:#f1fa8c">&#34;&#39;appmenu:minimize,maximize,close&#39;&#34;</span>
+</code></pre></div><h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>It was nice to get my feet wet with Ansible. That said, I wonder how much I&rsquo;d use it in a professional setting. I think it would depend how much of the infrastructure is self hosted. It seems like it would at least be useful for the provisioning of developer workstations.</p>
+<p>I&rsquo;ve left out some of the code for brevity. You can find the complete files at this <a href="https://github.com/rickthackeray/ansible-workstations">github repo.</a></p>
+<p>Cheers!<br>
+Rick</p>
+<p> </p>
+<p> </p>
+<hr>
+<h3 id="resources">Resources<a hidden class="anchor" aria-hidden="true" href="#resources">#</a></h3>
+<ul>
+<li>Ansible Official Documentation - <a href="https://docs.ansible.com/">https://docs.ansible.com/</a></li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://rickt.io/posts/10-terraform-for-ecs/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Using Terraform for ECS/EC2</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="https://rickt.io/">Learning DevOps with Rick</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
