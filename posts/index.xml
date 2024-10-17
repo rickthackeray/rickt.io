@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Posts on Learning DevOps with Rick</title>
+    <title>Posts on Learning DevOps Engineering with Rick</title>
     <link>https://rickt.io/posts/</link>
-    <description>Recent content in Posts on Learning DevOps with Rick</description>
+    <description>Recent content in Posts on Learning DevOps Engineering with Rick</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 17 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/posts/index.xml" rel="self" type="application/rss+xml" />
