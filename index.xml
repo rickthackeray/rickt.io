@@ -6,7 +6,17 @@
     <description>Recent content on DevOps Engineering with Rick</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 17 Oct 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 04 Nov 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://rickt.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>12 Deploying Kubernetes locally on Proxmox</title>
+      <link>https://rickt.io/posts/12-deploying-kubernetes-locally-on-proxmox/</link>
+      <pubDate>Mon, 04 Nov 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://rickt.io/posts/12-deploying-kubernetes-locally-on-proxmox/</guid>
+      <description>Introduction Here it is - The mountain that I&amp;rsquo;ve been excited and nervous to climb. Today I&amp;rsquo;ll describe my experience getting a local, multi node cluster of Kubernetes running. I was excited to play with one of the most interesting and now rather ubiquitous technologies in modern software operations.
+The nerves came from the amount of difficulty and complexity that was regularly reported by people online. In order to reduce the overwhelming task to a digestable portion, I decided to go with a somewhat automated deployment.</description>
+    </item>
+    
     <item>
       <title>Using Ansible to Configure a New Workstation</title>
       <link>https://rickt.io/posts/11-using-ansible-to-configure-a-new-workstation/</link>
